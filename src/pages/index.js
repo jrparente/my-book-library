@@ -1,10 +1,14 @@
 import Footer from "@/components/Common/Footer";
 import Header from "@/components/Common/Header";
+import Head from "next/head";
 import Link from "next/link";
 
 export default function Home() {
   return (
     <>
+      <Head>
+        <title>My Book Library</title>
+      </Head>
       <Header />
       <main className="flex flex-col items-center justify-center min-h-screen py-2 bg-white dark:bg-gray-900">
         <div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12">
