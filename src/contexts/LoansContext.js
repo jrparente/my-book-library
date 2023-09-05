@@ -30,16 +30,21 @@ export const LoansProvider = ({ children, userId }) => {
   }, [userId]);
 
   const addLoan = async (newLoan) => {
-    const { data, error } = await supabase
-      .from("loanedbooks")
-      .insert([newLoan])
-      .select();
-    if (error) {
-      console.error("Error adding new loan:", error);
+    try {
+      const { data, error } = await supabase
+        .from("loanedbooks")
+        .insert([newLoan])
+        .select();
+      if (error) {
+        console.error("Error adding new loan:", error);
+        return null;
+      }
+      setLoanedBooks([...loanedBooks, data]);
+      return data;
+    } catch (err) {
+      console.error("Exception while adding new loan:", err);
       return null;
     }
-    setLoanedBooks([...loanedBooks, data]);
-    return data;
   };
 
   const deleteLoan = async (loanId) => {

@@ -67,7 +67,7 @@ const LoanedBooks = () => {
               />
             </div>
             <Link
-              href="/dashboard/loans/AddNewLoan"
+              href="/dashboard/loanedbooks/AddNewLoan"
               className="bg-blue-500 text-white px-4 py-2 rounded"
             >
               Add New Loan
@@ -92,14 +92,15 @@ const LoanedBooks = () => {
               const isOverdue = new Date(loan.dueDate) < new Date();
 
               return (
-                <div
+                <Link
                   key={loan.loanid}
+                  href={`/dashboard/loanedbooks/${loan.loanid}`}
                   className="p-4 bg-white border rounded shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
                 >
-                  <div className="flex justify-between">
+                  <div className="flex items-start justify-between mb-2">
                     <h2 className="text-xl">{matchingBook?.title}</h2>
                     <div
-                      className={`p-2 rounded-full text-white ${getStatusColor(
+                      className={`px-2 py-1 rounded-full text-xs text-white ${getStatusColor(
                         isOverdue
                       )}`}
                     >
@@ -108,7 +109,7 @@ const LoanedBooks = () => {
                   </div>
                   <p>Loaned to: {loan.borrowerName}</p>
                   <p>Due date: {new Date(loan.dueDate).toLocaleDateString()}</p>
-                </div>
+                </Link>
               );
             })}
           </div>

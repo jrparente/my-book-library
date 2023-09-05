@@ -25,6 +25,14 @@ const Dashboard = () => {
   const { books } = useBooks();
   const { loanedBooks, fetchLoanedBooks } = useLoans();
 
+  const filteredBooks = books.filter(
+    (book) => book.status !== "Wishlist"
+  ).length;
+
+  const wishlistBooks = books.filter(
+    (book) => book.status === "Wishlist"
+  ).length;
+
   useEffect(() => {
     if (user && user.id) {
       fetchLoanedBooks(user.id);
@@ -43,7 +51,7 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <SectionCard
             title="My Library"
-            description={`You have ${books.length} books.`}
+            description={`You have ${filteredBooks} books in your library.`}
             href="/dashboard/books"
           />
           <SectionCard
@@ -53,8 +61,8 @@ const Dashboard = () => {
           />
           <SectionCard
             title="Wishlist"
-            description="Books you're interested in acquiring."
-            href="/dashboard/"
+            description={`You have ${wishlistBooks} books in your wishlist.`}
+            href="/dashboard/wishlist"
           />
         </div>
       </div>
