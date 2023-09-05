@@ -5,6 +5,7 @@ import React, { useEffect } from "react";
 import Layout from "./layout";
 import SectionCard from "@/components/Dashboard/SectionCard";
 import { FaBook, FaHandHolding, FaRegHeart } from "react-icons/fa";
+import { useRouter } from "next/router";
 
 const Dashboard = () => {
   const { user } = useUser();

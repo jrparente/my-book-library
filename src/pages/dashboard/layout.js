@@ -6,11 +6,13 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Head from "next/head";
 import Footer from "@/components/Dashboard/Footer";
+import { useRouter } from "next/router";
 
 const Layout = ({ children }) => {
   const [asideOpen, toggleAside] = useToggle(false);
   const [menuOpen, toggleMenu] = useToggle(false);
-  const { fetchUserProfile } = useUser();
+  const { fetchUserProfile, logout, user } = useUser();
+  const router = useRouter();
 
   const [userProfile, setUserProfile] = useState({
     name: "",
@@ -18,13 +20,24 @@ const Layout = ({ children }) => {
     image_url: null,
   });
 
+  // Check if user is logged in
   useEffect(() => {
-    const fetchUser = async () => {
-      const fetchedProfile = await fetchUserProfile();
-      setUserProfile(fetchedProfile);
-    };
-    fetchUser();
-  }, []);
+    if (!user) {
+      console.log("User not logged in. Redirecting to login page.");
+      router.push("/login"); // Redirect to the sign-in page if the user is not logged in
+    } else {
+      const fetchUser = async () => {
+        const fetchedProfile = await fetchUserProfile();
+        setUserProfile(fetchedProfile);
+      };
+      fetchUser();
+    }
+  }, [user, router, fetchUserProfile]);
+
+  const handleLogout = async () => {
+    await logout(); // Assuming `logout` is a function that clears user session
+    router.push("/"); // Redirecting to login page
+  };
 
   return (
     <>
@@ -51,13 +64,14 @@ const Layout = ({ children }) => {
           >
             <div className="px-4 py-3" role="none">
               <p className="text-sm text-gray-900 dark:text-white" role="none">
-                {userProfile.firstName || "User"}
+                {userProfile[0].firstName || "User"}{" "}
+                {userProfile[0].lastName || "Name"}
               </p>
               <p
                 className="text-sm font-medium text-gray-900 truncate dark:text-gray-300"
                 role="none"
               >
-                {userProfile.email || "user@email.com"}
+                {userProfile[0].email || "user@email.com"}
               </p>
             </div>
             <ul className="py-1" role="none">
@@ -80,13 +94,13 @@ const Layout = ({ children }) => {
                 </Link>
               </li>
               <li>
-                <Link
-                  href="#"
+                <button
+                  onClick={handleLogout}
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                   role="menuitem"
                 >
                   Sign out
-                </Link>
+                </button>
               </li>
             </ul>
           </nav>

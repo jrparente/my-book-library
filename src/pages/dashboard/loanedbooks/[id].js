@@ -29,7 +29,7 @@ export default function LoanDetails() {
 
   return (
     <Layout>
-      <div className="p-4">
+      <div className="p-2 sm:p-4 md:p-6 lg:p-8 xl:p-12 mt-14 md:mt-8 lg:mt-6 w-full">
         <div className="flex mb-4">
           <img
             src={bookDetails?.imageUrl || "/path/to/placeholder-image.png"}
