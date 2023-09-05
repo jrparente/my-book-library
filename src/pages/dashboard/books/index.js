@@ -10,7 +10,7 @@ const Books = () => {
   return (
     <Layout>
       {/* Main Content */}
-      <div className="p-4 mt-14">
+      <div className="p-2 sm:p-4 md:p-6 lg:p-8 xl:p-12 mt-14 w-full">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-3xl mb-4 text-gray-800 dark:text-white">
             Your Books
@@ -22,9 +22,14 @@ const Books = () => {
             Add Book
           </Link>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-gray-800">
+        <div
+          style={{
+            gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+          }}
+          className="grid gap-4"
+        >
           {loading ? (
-            <p>Loading...</p>
+            <p className="text-gray-800 dark:text-white">Loading...</p>
           ) : (
             books.map((book, index) => <BookCard key={book.id} book={book} />)
           )}

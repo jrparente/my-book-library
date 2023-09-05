@@ -5,8 +5,10 @@ import useToggle from "@/lib/useToggle";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Head from "next/head";
+import Footer from "@/components/Dashboard/Footer";
 
 const Layout = ({ children }) => {
+  const [asideOpen, toggleAside] = useToggle(false);
   const [menuOpen, toggleMenu] = useToggle(false);
   const { fetchUserProfile } = useUser();
 
@@ -30,7 +32,11 @@ const Layout = ({ children }) => {
         <title>My Book Library</title>
       </Head>
       <div className="bg-gray-100 min-h-screen flex">
-        <Header toggleMenu={toggleMenu} userProfile={userProfile} />
+        <Header
+          toggleMenu={toggleMenu}
+          userProfile={userProfile}
+          toggleAside={toggleAside}
+        />
         {menuOpen && (
           <nav
             style={{
@@ -85,11 +91,12 @@ const Layout = ({ children }) => {
             </ul>
           </nav>
         )}
-        <Aside />
+        <Aside asideOpen={asideOpen} />
         <main className="w-full p-4 sm:ml-64 bg-white dark:bg-gray-900">
           {children}
         </main>
       </div>
+      {/* <Footer /> */}
     </>
   );
 };

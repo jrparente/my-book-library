@@ -33,7 +33,7 @@ const Dashboard = () => {
     <Layout>
       {/* Main Content */}
 
-      <div className="p-4 mt-14">
+      <div className="p-2 sm:p-4 md:p-6 lg:p-8 xl:p-12 mt-14 w-full">
         <h1 className="text-3xl mb-4 dark:text-white">
           My Book Library Dashboard
         </h1>

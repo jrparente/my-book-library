@@ -36,7 +36,7 @@ export default function BookDetails() {
     <Layout>
       {/* Main Content */}
 
-      <div className="p-4 w-full mt-14">
+      <div className="p-2 sm:p-4 md:p-6 lg:p-8 xl:p-12 mt-14 w-full">
         {/* Book header */}
         <div className="flex w-full mb-4">
           <img
