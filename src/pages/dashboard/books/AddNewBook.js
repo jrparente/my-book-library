@@ -2,15 +2,22 @@ import BookForm from "@/components/Dashboard/BookForm/BookForm";
 import Layout from "../layout";
 import { useBooks } from "@/contexts/BooksContext";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import SearchBookByISBN from "@/components/Dashboard/SearchBookByISBN/SearchBookByISBN";
 
 const AddNewBook = () => {
   const { addBook } = useBooks();
   const route = useRouter();
-  const initialValues = {};
+  const initialValues = route.query.initialValues
+    ? JSON.parse(route.query.initialValues)
+    : {};
 
-  // Notification state
   const [notification, setNotification] = useState(null);
+  const [activeTab, setActiveTab] = useState(route.query.activeTab || "manual");
+
+  useEffect(() => {
+    setActiveTab(route.query.activeTab || "manual");
+  }, [route.query]);
 
   // Function to show notification
   const showNotification = (message, type = "success") => {
@@ -41,10 +48,40 @@ const AddNewBook = () => {
 
   return (
     <Layout>
-      <div className="p-4 mt-14">
+      <div className="p-2 sm:p-4 md:p-6 lg:p-8 xl:p-12 mt-14 md:mt-8 lg:mt-6 w-full">
         <h1 className="text-3xl mb-4 text-gray-800 dark:text-white">
           Add New Book
         </h1>
+
+        {/* Tab controls */}
+        <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
+          <li className="mr-2">
+            <button
+              onClick={() => setActiveTab("manual")}
+              className={`inline-block p-4 rounded-t-lg 
+                 ${
+                   activeTab === "manual"
+                     ? "text-blue-600 bg-gray-100 dark:bg-gray-800 dark:text-blue-500"
+                     : ""
+                 }`}
+            >
+              Add Manually
+            </button>
+          </li>
+          <li className="mr-2">
+            <button
+              onClick={() => setActiveTab("isbn")}
+              className={`inline-block p-4 rounded-t-lg 
+                 ${
+                   activeTab === "isbn"
+                     ? "text-blue-600 bg-gray-100 dark:bg-gray-800 dark:text-blue-500"
+                     : ""
+                 }`}
+            >
+              Search by ISBN
+            </button>
+          </li>
+        </ul>
 
         {/* Display notification */}
         {notification && (
@@ -57,7 +94,11 @@ const AddNewBook = () => {
           </div>
         )}
 
-        <BookForm initialValues={initialValues} onSubmit={handleSubmit} />
+        {/* Display content based on active tab */}
+        {activeTab === "manual" && (
+          <BookForm initialValues={initialValues} onSubmit={handleSubmit} />
+        )}
+        {activeTab === "isbn" && <SearchBookByISBN />}
       </div>
     </Layout>
   );

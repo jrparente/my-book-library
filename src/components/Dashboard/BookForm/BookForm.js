@@ -4,7 +4,9 @@ import supabase from "@/lib/supabaseClient";
 
 const BookForm = ({ initialValues, onSubmit }) => {
   const { user } = useUser();
-  const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState(
+    initialValues.imageUrl ?? null
+  );
 
   useEffect(() => {
     console.log("State updated - uploadedImageUrl:", uploadedImageUrl);
@@ -104,7 +106,7 @@ const BookForm = ({ initialValues, onSubmit }) => {
   };
 
   return (
-    <div className="mt-14 max-w-4xl">
+    <div className="mt-4 max-w-4xl">
       <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
         Book Details
       </h2>
@@ -139,6 +141,13 @@ const BookForm = ({ initialValues, onSubmit }) => {
             >
               Book Cover
             </label>
+            {uploadedImageUrl && (
+              <img
+                src={uploadedImageUrl}
+                alt="Uploaded Preview"
+                className="mt-4 mb-4 h-32 w-32 object-cover"
+              />
+            )}
             <input
               type="file"
               accept="image/*"
@@ -146,13 +155,6 @@ const BookForm = ({ initialValues, onSubmit }) => {
               id="imageUpload"
               onChange={handleFileUpload}
             />
-            {uploadedImageUrl && (
-              <img
-                src={uploadedImageUrl}
-                alt="Uploaded Preview"
-                className="mt-4 h-32 w-32 object-cover"
-              />
-            )}
           </div>
 
           {/* Series */}
@@ -451,7 +453,7 @@ const BookForm = ({ initialValues, onSubmit }) => {
               className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-blue-700 rounded-lg"
               onSubmit={onSubmit}
             >
-              Submit
+              Add to Library
             </button>
           </div>
         </div>

@@ -39,15 +39,16 @@ const BookCard = ({ book }) => {
   return (
     <Link
       href={`/dashboard/books/${book.id}`}
-      className="flex flex-wrap p-2 sm:p-4 md:p-6 bg-white border rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+      className="flex flex-wrap p-2 sm:p-4  bg-white border rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
     >
-      <div className="flex flex-col w-full lg:w-1/4 pr-4">
+      <div className="flex flex-col w-full lg:w-1/3 pr-4">
         <Image
           src={book?.imageUrl ? book.imageUrl : "/images/placeholder-image.png"}
           alt="Book cover"
-          width={100}
-          height={150}
+          width={200}
+          height={350}
           objectFit="cover"
+          className="w-full mx-auto lg:mx-0"
         />
         {book.status && (
           <div
@@ -58,7 +59,7 @@ const BookCard = ({ book }) => {
           </div>
         )}
       </div>
-      <div className="w-full lg:w-3/4 flex flex-col justify-between mt-4 lg:mt-0">
+      <div className="w-full lg:w-2/3 flex flex-col justify-between mt-4 lg:mt-0">
         <div className="flex flex-col ">
           {book.series && (
             <div className="flex items-center bg-gray-300 px-2 py-1 rounded-full mb-2 me-auto text-sm text-gray-900">

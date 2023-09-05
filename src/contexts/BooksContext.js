@@ -54,12 +54,18 @@ export const BooksProvider = ({ children }) => {
 
     if (error) {
       console.error("Error deleting book:", error);
-      return false;
+
+      // Check if the error is related to foreign key constraints
+      if (error.code === "23503") {
+        return "This book is currently loaned and cannot be deleted.";
+      }
+
+      return "An unknown error occurred while trying to delete the book.";
     }
 
     const updatedBooks = books.filter((book) => book.id !== bookId);
     setBooks(updatedBooks);
-    return true;
+    return null; // Return null to indicate successful deletion
   };
 
   const editBook = async (bookId, updatedBook) => {
@@ -84,6 +90,22 @@ export const BooksProvider = ({ children }) => {
     return true; // return true for success
   };
 
+  const fetchResults = async (query, userid) => {
+    const { data, error } = await supabase
+      .from("books")
+      .select("*")
+      .eq("user_id", userid)
+      .or(
+        `title.ilike.%${query}%,author_first_name.ilike.%${query}%,author_last_name.ilike.%${query}%,series.ilike.%${query}%`
+      );
+
+    if (error) {
+      console.error("Error fetching search results:", error);
+    } else {
+      return data;
+    }
+  };
+
   const value = {
     books,
     loading,
@@ -91,6 +113,7 @@ export const BooksProvider = ({ children }) => {
     fetchBooks,
     deleteBook,
     editBook,
+    fetchResults,
   };
 
   return (
