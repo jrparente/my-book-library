@@ -3,22 +3,8 @@ import { useLoans } from "@/contexts/LoansContext";
 import { useUser } from "@/contexts/UserContext";
 import React, { useEffect } from "react";
 import Layout from "./layout";
-import Link from "next/link";
-
-const SectionCard = ({ title, description, href = "/" }) => (
-  <Link
-    href={href}
-    className="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
-  >
-    <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-      {title}
-    </h5>
-    <p className="font-normal text-gray-700 dark:text-gray-400">
-      {description}
-    </p>
-    {/* You can add buttons or other interactive elements here */}
-  </Link>
-);
+import SectionCard from "@/components/Dashboard/SectionCard";
+import { FaBook, FaHandHolding, FaRegHeart } from "react-icons/fa";
 
 const Dashboard = () => {
   const { user } = useUser();
@@ -39,30 +25,51 @@ const Dashboard = () => {
     }
   }, [user, fetchLoanedBooks]);
 
+  const isEmptyLibrary = filteredBooks === 0;
+  const isEmptyLoanedBooks = loanedBooks.length === 0;
+  const isEmptyWishlist = wishlistBooks === 0;
+
   return (
     <Layout>
       {/* Main Content */}
 
-      <div className="p-2 sm:p-4 md:p-6 lg:p-8 xl:p-12 mt-14 w-full">
+      <div className="p-2 sm:p-4 md:p-6 lg:p-8 xl:p-12 mt-14 md:mt-8 lg:mt-6 w-full">
         <h1 className="text-3xl mb-4 dark:text-white">
           My Book Library Dashboard
         </h1>
-
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <SectionCard
             title="My Library"
-            description={`You have ${filteredBooks} books in your library.`}
+            description={
+              isEmptyLibrary
+                ? "No books in your library yet. Start adding some!"
+                : `You have ${filteredBooks} books in your library.`
+            }
             href="/dashboard/books"
+            icon={<FaBook size={24} />}
+            color="blue"
           />
           <SectionCard
             title="Loaned Books"
-            description={`You have ${loanedBooks.length} loaned books.`}
+            description={
+              isEmptyLoanedBooks
+                ? "No loaned books. Start loaning out your books!"
+                : `You have ${loanedBooks.length} loaned books.`
+            }
             href="/dashboard/loanedbooks"
+            icon={<FaHandHolding size={24} />}
+            color="green"
           />
           <SectionCard
             title="Wishlist"
-            description={`You have ${wishlistBooks} books in your wishlist.`}
+            description={
+              isEmptyWishlist
+                ? "No books in your wishlist. Start wishing!"
+                : `You have ${wishlistBooks} books in your wishlist.`
+            }
             href="/dashboard/wishlist"
+            icon={<FaRegHeart size={24} />}
+            color="red"
           />
         </div>
       </div>

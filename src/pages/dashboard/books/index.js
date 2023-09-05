@@ -32,7 +32,7 @@ const Books = () => {
   return (
     <Layout>
       {/* Main Content */}
-      <div className="p-2 sm:p-4 md:p-6 lg:p-8 xl:p-12 mt-14 w-full">
+      <div className="p-2 sm:p-4 md:p-6 lg:p-8 xl:p-12 mt-14 md:mt-8 lg:mt-6 w-full">
         <div className="flex flex-col md:flex-row justify-between items-center mb-4">
           <h1 className="text-3xl mb-4 text-gray-800 dark:text-white">
             Your Books
