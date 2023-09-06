@@ -4,6 +4,7 @@ import { useBooks } from "@/contexts/BooksContext";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import SearchBookByISBN from "@/components/Dashboard/SearchBookByISBN/SearchBookByISBN";
+import SearchBookByQuery from "@/components/Dashboard/SearchBookByQuery/SearchBookByQuery";
 
 const AddNewBook = () => {
   const { addBook } = useBooks();
@@ -81,6 +82,19 @@ const AddNewBook = () => {
               Search by ISBN
             </button>
           </li>
+          <li className="mr-2">
+            <button
+              onClick={() => setActiveTab("search")}
+              className={`inline-block p-4 rounded-t-lg 
+                 ${
+                   activeTab === "search"
+                     ? "text-blue-600 bg-gray-100 dark:bg-gray-800 dark:text-blue-500"
+                     : ""
+                 }`}
+            >
+              Search Book
+            </button>
+          </li>
         </ul>
 
         {/* Display notification */}
@@ -99,6 +113,7 @@ const AddNewBook = () => {
           <BookForm initialValues={initialValues} onSubmit={handleSubmit} />
         )}
         {activeTab === "isbn" && <SearchBookByISBN />}
+        {activeTab === "search" && <SearchBookByQuery />}
       </div>
     </Layout>
   );

@@ -35,7 +35,6 @@ export default function SearchBookByISBN() {
 
       if (data && data.title) {
         setBook(data);
-        console.log(data);
         // Update other state variables based on the fetched book data
         setTitle(data.title);
         setSeries(data.series || ""); // The API response may not have 'series'
@@ -135,54 +134,60 @@ export default function SearchBookByISBN() {
         </button>
       </form>
       {isLoading && <div className="loader"></div>}
+
       {book && (
-        <div className="flex flex-col flex-wrap p-2 sm:p-4 md:p-6 bg-white border rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-          <img
-            src={book.imageLinks.thumbnail}
-            className="w-1/4 md:w-1/6 lg:w-1/8 object-cover mb-4 rounded-lg shadow"
-            alt="Book cover"
-          />
-          <h2 className="text-2xl font-extrabold mb-2 text-gray-900 dark:text-white">
-            {book.title}
+        <>
+          <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
+            Results
           </h2>
-          <p className="text-lg mb-1 text-gray-700 dark:text-gray-300">
-            <span className="font-semibold">Author:</span>{" "}
-            {book.authors.join(", ")}
-          </p>
-          <p className="text-lg mb-1 text-gray-700 dark:text-gray-300">
-            <span className="font-semibold">Publisher:</span> {book.publisher}
-          </p>
-          <p className="text-lg mb-1 text-gray-700 dark:text-gray-300">
-            <span className="font-semibold">Published Date:</span>{" "}
-            {book.publishedDate}
-          </p>
-          <p className="text-lg mb-1 text-gray-700 dark:text-gray-300">
-            <span className="font-semibold">ISBN:</span> {isbn}
-          </p>
-          <p className="text-lg mb-1 text-gray-700 dark:text-gray-300">
-            <span className="font-semibold">Format:</span> {book.printType}
-          </p>
-          <p className="text-lg mb-1 text-gray-700 dark:text-gray-300">
-            <span className="font-semibold">Genre:</span>{" "}
-            {book.categories && book.categories.join(", ")}
-          </p>
-          <p className="text-lg mb-1 text-gray-700 dark:text-gray-300">
-            <span className="font-semibold">Language:</span> {book.language}
-          </p>
-          <p className="text-lg mb-1 text-gray-700 dark:text-gray-300">
-            <span className="font-semibold">Pages:</span> {book.pageCount}
-          </p>
-          <p className="text-lg mb-2 text-gray-700 dark:text-gray-300">
-            <span className="font-semibold">Description:</span>{" "}
-            {book.description}
-          </p>
-          <button
-            className="inline-flex items-center px-6 py-3 text-base font-medium text-center text-white bg-blue-600 hover:bg-blue-700 dark:hover:bg-blue-800 rounded-lg focus:ring focus:ring-blue-300 focus:ring-opacity-50 me-auto"
-            onClick={addToLibrary}
-          >
-            Edit and Confirm Details
-          </button>
-        </div>
+          <div className="flex flex-col flex-wrap p-2 sm:p-4 md:p-6 bg-white border rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+            <img
+              src={book.imageLinks.thumbnail}
+              className="w-1/4 md:w-1/6 lg:w-1/8 object-cover mb-4 rounded-lg shadow"
+              alt="Book cover"
+            />
+            <h2 className="text-2xl font-extrabold mb-2 text-gray-900 dark:text-white">
+              {book.title}
+            </h2>
+            <p className="text-lg mb-1 text-gray-700 dark:text-gray-300">
+              <span className="font-semibold">Author:</span>{" "}
+              {book.authors.join(", ")}
+            </p>
+            <p className="text-lg mb-1 text-gray-700 dark:text-gray-300">
+              <span className="font-semibold">Publisher:</span> {book.publisher}
+            </p>
+            <p className="text-lg mb-1 text-gray-700 dark:text-gray-300">
+              <span className="font-semibold">Published Date:</span>{" "}
+              {book.publishedDate}
+            </p>
+            <p className="text-lg mb-1 text-gray-700 dark:text-gray-300">
+              <span className="font-semibold">ISBN:</span> {isbn}
+            </p>
+            <p className="text-lg mb-1 text-gray-700 dark:text-gray-300">
+              <span className="font-semibold">Format:</span> {book.printType}
+            </p>
+            <p className="text-lg mb-1 text-gray-700 dark:text-gray-300">
+              <span className="font-semibold">Genre:</span>{" "}
+              {book.categories && book.categories.join(", ")}
+            </p>
+            <p className="text-lg mb-1 text-gray-700 dark:text-gray-300">
+              <span className="font-semibold">Language:</span> {book.language}
+            </p>
+            <p className="text-lg mb-1 text-gray-700 dark:text-gray-300">
+              <span className="font-semibold">Pages:</span> {book.pageCount}
+            </p>
+            <p className="text-lg mb-2 text-gray-700 dark:text-gray-300">
+              <span className="font-semibold">Description:</span>{" "}
+              {book.description}
+            </p>
+            <button
+              className="inline-flex items-center px-6 py-3 text-base font-medium text-center text-white bg-blue-600 hover:bg-blue-700 dark:hover:bg-blue-800 rounded-lg focus:ring focus:ring-blue-300 focus:ring-opacity-50 me-auto"
+              onClick={addToLibrary}
+            >
+              Edit and Confirm Details
+            </button>
+          </div>
+        </>
       )}
     </div>
   );

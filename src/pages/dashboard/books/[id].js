@@ -2,6 +2,8 @@ import { useBooks } from "@/contexts/BooksContext";
 import { useRouter } from "next/router";
 import Layout from "../layout";
 import Image from "next/image";
+import { useState } from "react";
+import DeleteModal from "@/components/Dashboard/DeleteModal/DeleteModal";
 
 const getStatusColor = (status) => {
   switch (status) {
@@ -26,6 +28,11 @@ export default function BookDetails() {
   const router = useRouter();
   const { id } = router.query;
   const { books, deleteBook } = useBooks();
+  const [showModal, setShowModal] = useState(false);
+
+  const handleClose = () => {
+    setShowModal(false);
+  };
 
   const book = books.find((book) => book.id === id);
 
@@ -173,7 +180,7 @@ export default function BookDetails() {
           <button
             type="button"
             className="inline-flex items-center text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900"
-            onClick={onDeleteBook}
+            onClick={() => setShowModal(true)}
           >
             <svg
               aria-hidden="true"
@@ -190,6 +197,11 @@ export default function BookDetails() {
             </svg>
             Delete Book
           </button>
+          <DeleteModal
+            showModal={showModal}
+            handleDelete={onDeleteBook}
+            handleClose={handleClose}
+          />
         </div>
       </div>
     </Layout>
