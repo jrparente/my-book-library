@@ -51,7 +51,7 @@ const Header = ({ toggleMenu, userProfile, toggleAside }) => {
                   <img
                     className="w-8 h-8 rounded-full"
                     src={
-                      userProfile[0].image_url ||
+                      userProfile[0]?.image_url ||
                       "/images/profile-placeholder.png"
                     }
                     alt="User photo"
