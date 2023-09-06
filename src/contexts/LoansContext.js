@@ -20,7 +20,9 @@ export const LoansProvider = ({ children, userId }) => {
     if (error) {
       console.error("Error fetching loaned books:", error);
     } else {
-      setLoanedBooks(Array.isArray(data) ? data : [data]);
+      if (JSON.stringify(data) !== JSON.stringify(loanedBooks)) {
+        setLoanedBooks(Array.isArray(data) ? data : [data]);
+      }
     }
     setLoading(false);
   };

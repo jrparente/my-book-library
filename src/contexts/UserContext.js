@@ -15,6 +15,11 @@ export const UserProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const router = useRouter();
+  const [userProfile, setUserProfile] = useState({
+    name: "",
+    email: "",
+    image_url: null,
+  });
 
   useEffect(() => {
     const handleAuthStateChange = async (event, session) => {
@@ -22,12 +27,11 @@ export const UserProvider = ({ children }) => {
       setUser(session?.user ?? null);
       setLoading(false);
 
-      if (
-        event === AuthEvents.SIGNED_IN &&
-        !router.pathname.startsWith("/dashboard")
-      ) {
-        console.log("changed router");
-        router.push("/dashboard");
+      if (event === AuthEvents.SIGNED_IN) {
+        if (!router.pathname.startsWith("/dashboard")) {
+          router.push("/dashboard");
+        }
+        fetchUserProfile();
       }
 
       if (event === AuthEvents.SIGNED_OUT) {
@@ -55,7 +59,8 @@ export const UserProvider = ({ children }) => {
         .select();
 
       if (data) {
-        return data;
+        setUserProfile(data);
+        return userProfile;
       }
       if (error) {
         setError("Error fetching user profile: " + error.message);
@@ -78,7 +83,7 @@ export const UserProvider = ({ children }) => {
     session,
     loading,
     error,
-    fetchUserProfile,
+    userProfile,
     logout,
   };
 

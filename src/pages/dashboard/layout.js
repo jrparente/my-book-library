@@ -11,28 +11,16 @@ import { useRouter } from "next/router";
 const Layout = ({ children }) => {
   const [asideOpen, toggleAside] = useToggle(false);
   const [menuOpen, toggleMenu] = useToggle(false);
-  const { fetchUserProfile, logout, user } = useUser();
+  const { userProfile, logout, user } = useUser();
   const router = useRouter();
-
-  const [userProfile, setUserProfile] = useState({
-    name: "",
-    email: "",
-    image_url: null,
-  });
 
   // Check if user is logged in
   useEffect(() => {
     if (!user) {
       console.log("User not logged in. Redirecting to login page.");
       router.push("/login"); // Redirect to the sign-in page if the user is not logged in
-    } else {
-      const fetchUser = async () => {
-        const fetchedProfile = await fetchUserProfile();
-        setUserProfile(fetchedProfile);
-      };
-      fetchUser();
     }
-  }, [user, router, fetchUserProfile]);
+  }, [user, router]);
 
   const handleLogout = async () => {
     await logout(); // Assuming `logout` is a function that clears user session

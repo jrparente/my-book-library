@@ -5,12 +5,17 @@ import React, { useEffect } from "react";
 import Layout from "./layout";
 import SectionCard from "@/components/Dashboard/SectionCard";
 import { FaBook, FaHandHolding, FaRegHeart } from "react-icons/fa";
-import { useRouter } from "next/router";
 
 const Dashboard = () => {
-  const { user } = useUser();
+  const { user, userProfile } = useUser();
   const { books } = useBooks();
   const { loanedBooks, fetchLoanedBooks } = useLoans();
+  const greeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good Morning";
+    if (hour < 18) return "Good Afternoon";
+    return "Good Evening";
+  };
 
   const filteredBooks = books.filter(
     (book) => book.status !== "Wishlist"
@@ -33,11 +38,13 @@ const Dashboard = () => {
   return (
     <Layout>
       {/* Main Content */}
-
       <div className="p-2 sm:p-4 md:p-6 lg:p-8 xl:p-12 mt-14 md:mt-8 lg:mt-6 w-full">
         <h1 className="text-3xl mb-4 dark:text-white">
-          My Book Library Dashboard
+          {`${greeting()}${
+            userProfile[0]?.firstName ? `, ${userProfile[0].firstName}` : ""
+          }!`}
         </h1>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <SectionCard
             title="My Library"
