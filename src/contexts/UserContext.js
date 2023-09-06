@@ -22,7 +22,11 @@ export const UserProvider = ({ children }) => {
       setUser(session?.user ?? null);
       setLoading(false);
 
-      if (event === AuthEvents.SIGNED_IN) {
+      if (
+        event === AuthEvents.SIGNED_IN &&
+        !router.pathname.startsWith("/dashboard")
+      ) {
+        console.log("changed router");
         router.push("/dashboard");
       }
 
