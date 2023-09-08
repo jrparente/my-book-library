@@ -1,12 +1,96 @@
 import { useUser } from "@/contexts/UserContext";
 import { useEffect, useState } from "react";
 import supabase from "@/lib/supabaseClient";
+import { useShelves } from "@/contexts/ShelfContext";
+import Input from "./Input";
 
-const BookForm = ({ initialValues, onSubmit }) => {
+const formatDate = (date) => {
+  if (!date) {
+    console.error("Date is undefined or null");
+    return null;
+  }
+  const parsedDate = new Date(date);
+  if (isNaN(parsedDate.getTime())) {
+    console.error("Invalid date format:", date);
+    return null;
+  }
+  return parsedDate.toISOString().split("T")[0];
+};
+
+const parseIntOrNull = (value) => (value ? parseInt(value) : null);
+const parseFloatOrNull = (value) => (value ? parseFloat(value) : null);
+
+const BookForm = ({
+  initialValues: {
+    id = null,
+    title = "",
+    series = "",
+    volume = "",
+    author_last_name = "",
+    author_first_name = "",
+    publisher = "",
+    published_date = "",
+    isbn = "",
+    format = "",
+    imageUrl = null,
+    language = "",
+    pages = null,
+    price = null,
+    quantity = 1,
+    genre = "",
+    summary = "",
+    status = "To Read",
+    created_at = null,
+    shelf_id = null,
+  },
+  onSubmit,
+}) => {
   const { user } = useUser();
-  const [uploadedImageUrl, setUploadedImageUrl] = useState(
-    initialValues.imageUrl ?? null
-  );
+  const [uploadedImageUrl, setUploadedImageUrl] = useState(imageUrl ?? null);
+  const [selectedShelf, setSelectedShelf] = useState("");
+  const { shelves, fetchShelves, fetchInitialShelf } = useShelves();
+
+  // Initialize form data with either initial values or default values
+  const [formData, setFormData] = useState({
+    title: title ?? "",
+    series: series ?? "",
+    volume: volume ?? "",
+    author_last_name: author_last_name ?? "",
+    author_first_name: author_first_name ?? "",
+    publisher: publisher ?? "",
+    published_date: published_date ?? "",
+    isbn: isbn ?? "",
+    format: format ?? "",
+    language: language ?? "",
+    pages: pages ?? null,
+    price: price ?? null,
+    quantity: quantity ?? null,
+    genre: genre ?? "",
+    summary: summary ?? "",
+    status: status ?? "To Read",
+    imageUrl: imageUrl ?? "",
+    shelf_id: shelf_id ?? null,
+  });
+
+  // Fetch shelves for the user & the correct shelf for the book
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!user || !user.id) return;
+      fetchShelves(user.id);
+
+      // Fetch the initial shelf ID from your database using the book's ID
+      const initialShelfId = await fetchInitialShelf(id);
+      console.log("initialShelfId", initialShelfId);
+      // Set the initial shelf
+      if (initialShelfId) {
+        setSelectedShelf(initialShelfId);
+      } else {
+        setSelectedShelf(""); // Set to an empty string to show the "Select a shelf" option
+      }
+    };
+
+    fetchData();
+  }, [user, id]);
 
   useEffect(() => {
     console.log("State updated - uploadedImageUrl:", uploadedImageUrl);
@@ -40,52 +124,17 @@ const BookForm = ({ initialValues, onSubmit }) => {
     console.log("Uploaded image URL:", uploadedImageUrl);
     console.log("Form data image URL:", formData.imageUrl);
   };
-
-  const [formData, setFormData] = useState({
-    title: initialValues.title ?? "",
-    series: initialValues.series ?? "",
-    volume: initialValues.volume ?? "",
-    author_last_name: initialValues.author_last_name ?? "",
-    author_first_name: initialValues.author_first_name ?? "",
-    publisher: initialValues.publisher ?? "",
-    published_date: initialValues.published_date ?? "",
-    isbn: initialValues.isbn ?? "",
-    format: initialValues.format ?? "",
-    language: initialValues.language ?? "",
-    pages: initialValues.pages ?? "",
-    price: initialValues.price ?? "",
-    quantity: initialValues.quantity ?? "",
-    genre: initialValues.genre ?? "",
-    summary: initialValues.summary ?? "",
-    status: initialValues.status ?? "To Read",
-    imageUrl: initialValues.imageUrl ?? "",
-  });
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
-  const handleFormSubmit = (e) => {
+  console.log("selectedShelf", selectedShelf);
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-
-    // Validate date format or allow it to be null
-    const formattedPublishedDate = formData.published_date
-      ? new Date(formData.published_date).toISOString().split("T")[0]
-      : null;
-
-    if (
-      formattedPublishedDate &&
-      !formattedPublishedDate.match(/^\d{4}-\d{2}-\d{2}$/)
-    ) {
-      console.error("Invalid date format");
-      return;
-    }
-
-    // Convert integer and numeric fields
-    const volume = formData.volume ? parseInt(formData.volume) : null;
-    const pages = formData.pages ? parseInt(formData.pages) : null;
-    const quantity = formData.quantity ? parseInt(formData.quantity) : null;
-    const price = formData.price ? parseFloat(formData.price) : null;
+    const formattedPublishedDate = formatDate(formData.published_date);
+    const volume = parseIntOrNull(formData.volume);
+    const pages = parseIntOrNull(formData.pages);
+    const quantity = parseIntOrNull(formData.quantity);
+    const price = parseFloatOrNull(formData.price);
 
     // Add the created_at date as the current date
     const formattedCreatedDate = new Date().toISOString().split("T")[0];
@@ -99,9 +148,10 @@ const BookForm = ({ initialValues, onSubmit }) => {
       published_date: formattedPublishedDate,
       user_id: user.id,
       imageUrl: uploadedImageUrl || formData.imageUrl,
-      ...(!initialValues.created_at && { created_at: formattedCreatedDate }),
+      ...(!created_at && { created_at: formattedCreatedDate }),
+      shelf_id: selectedShelf,
     };
-
+    console.log("bookDetails", bookDetails);
     onSubmit(bookDetails);
   };
 
@@ -113,23 +163,38 @@ const BookForm = ({ initialValues, onSubmit }) => {
 
       <form onSubmit={handleFormSubmit}>
         <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
-          {/* Title */}
-          <div className="sm:col-span-2">
+          {/* Shelf */}
+          <div className="w-full">
             <label
-              htmlFor="title"
+              htmlFor="shelf"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              Title
+              Shelf
             </label>
-            <input
-              type="text"
+            <select
+              name="shelf"
+              id="shelf"
+              value={selectedShelf}
+              onChange={(e) => setSelectedShelf(e.target.value)}
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+            >
+              <option value="">Select a shelf</option>
+              {shelves.map((shelf) => (
+                <option key={shelf.id} value={shelf.shelf_id}>
+                  {shelf.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Title */}
+          <div className="sm:col-span-2">
+            <Input
+              label="Title"
               name="title"
-              id="title"
               placeholder="Title"
               value={formData.title}
               onChange={handleChange}
-              className="block w-full p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-              required
             />
           </div>
 
@@ -159,248 +224,149 @@ const BookForm = ({ initialValues, onSubmit }) => {
 
           {/* Series */}
           <div className="w-full">
-            <label
-              htmlFor="series"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Series
-            </label>
-            <input
-              type="text"
+            <Input
+              label="Series"
               name="series"
-              id="series"
               placeholder="Series"
               value={formData.series}
               onChange={handleChange}
-              className="block w-full p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
             />
           </div>
 
           {/* Volume */}
           <div className="w-full">
-            <label
-              htmlFor="volume"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Volume
-            </label>
-            <input
-              type="text"
+            <Input
+              label="Volume"
               name="volume"
-              id="volume"
               placeholder="Volume"
               value={formData.volume}
               onChange={handleChange}
-              className="block w-full p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
             />
           </div>
 
           {/* Author Last Name */}
           <div className="w-full">
-            <label
-              htmlFor="author_last_name"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Author Last Name
-            </label>
-            <input
-              type="text"
+            <Input
+              label="Author Last Name"
               name="author_last_name"
-              id="author_last_name"
               placeholder="Author Last Name"
               value={formData.author_last_name}
               onChange={handleChange}
-              className="block w-full p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
             />
           </div>
 
           {/* Author First Name */}
           <div className="w-full">
-            <label
-              htmlFor="author_first_name"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Author First Name
-            </label>
-            <input
-              type="text"
+            <Input
+              label="Author First Name"
               name="author_first_name"
-              id="author_first_name"
               placeholder="Author First Name"
               value={formData.author_first_name}
               onChange={handleChange}
-              className="block w-full p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
             />
           </div>
 
           {/* Publisher */}
           <div className="w-full">
-            <label
-              htmlFor="publisher"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Publisher
-            </label>
-            <input
-              type="text"
+            <Input
+              label="Publisher"
               name="publisher"
-              id="publisher"
               placeholder="Publisher"
               value={formData.publisher}
               onChange={handleChange}
-              className="block w-full p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
             />
           </div>
 
           {/* Published Date */}
           <div className="w-full">
-            <label
-              htmlFor="published_date"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Published Date
-            </label>
-            <input
-              type="text"
+            <Input
+              label="Published Date"
+              type="date"
               name="published_date"
-              id="published_date"
               placeholder="Published Date"
               value={formData.published_date}
               onChange={handleChange}
-              className="block w-full p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
             />
           </div>
 
           {/* ISBN */}
           <div className="w-full">
-            <label
-              htmlFor="isbn"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              ISBN
-            </label>
-            <input
-              type="text"
+            <Input
+              label="ISBN"
+              type="number"
               name="isbn"
-              id="isbn"
               placeholder="ISBN"
               value={formData.isbn}
               onChange={handleChange}
-              className="block w-full p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
             />
           </div>
 
           {/* Format */}
           <div className="w-full">
-            <label
-              htmlFor="format"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Format
-            </label>
-            <input
-              type="text"
+            <Input
+              label="Format"
               name="format"
-              id="format"
               placeholder="Format"
               value={formData.format}
               onChange={handleChange}
-              className="block w-full p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
             />
           </div>
 
           {/* Language */}
           <div className="w-full">
-            <label
-              htmlFor="language"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Language
-            </label>
-            <input
-              type="text"
+            <Input
+              label="Language"
               name="language"
-              id="language"
               placeholder="Language"
               value={formData.language}
               onChange={handleChange}
-              className="block w-full p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
             />
           </div>
 
           {/* Pages */}
           <div className="w-full">
-            <label
-              htmlFor="pages"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Pages
-            </label>
-            <input
+            <Input
+              label="Pages"
               type="number"
               name="pages"
-              id="pages"
               placeholder="Pages"
               value={formData.pages}
               onChange={handleChange}
-              className="block w-full p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
             />
           </div>
 
           {/* Price */}
           <div className="w-full">
-            <label
-              htmlFor="price"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Price
-            </label>
-            <input
+            <Input
+              label="Price"
               type="number"
               name="price"
-              id="price"
               placeholder="Price"
               value={formData.price}
               onChange={handleChange}
-              className="block w-full p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
             />
           </div>
 
           {/* Quantity */}
           <div className="w-full">
-            <label
-              htmlFor="quantity"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Quantity
-            </label>
-            <input
+            <Input
+              label="Quantity"
               type="number"
               name="quantity"
-              id="quantity"
               placeholder="Quantity"
               value={formData.quantity}
               onChange={handleChange}
-              className="block w-full p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
             />
           </div>
 
           {/* Genre */}
           <div className="w-full">
-            <label
-              htmlFor="genre"
-              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Genre
-            </label>
-            <input
-              type="text"
+            <Input
+              label="Genre"
               name="genre"
-              id="genre"
               placeholder="Genre"
               value={formData.genre}
               onChange={handleChange}
-              className="block w-full p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
             />
           </div>
 
@@ -451,7 +417,6 @@ const BookForm = ({ initialValues, onSubmit }) => {
             <button
               type="submit"
               className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-blue-700 rounded-lg"
-              onSubmit={onSubmit}
             >
               Add to Library
             </button>

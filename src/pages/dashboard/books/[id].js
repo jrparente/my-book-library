@@ -2,8 +2,9 @@ import { useBooks } from "@/contexts/BooksContext";
 import { useRouter } from "next/router";
 import Layout from "../layout";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DeleteModal from "@/components/Dashboard/DeleteModal/DeleteModal";
+import { useShelves } from "@/contexts/ShelfContext";
 
 const getStatusColor = (status) => {
   switch (status) {
@@ -28,13 +29,31 @@ export default function BookDetails() {
   const router = useRouter();
   const { id } = router.query;
   const { books, deleteBook } = useBooks();
+  const { fetchShelfById } = useShelves();
   const [showModal, setShowModal] = useState(false);
+  const [bookShelf, setBookShelf] = useState(null);
+
+  const book = books.find((book) => book.id === id);
+
+  // Fetch the book's initial shelf ID and then fetch the shelf's name
+  useEffect(() => {
+    const fetchBookShelf = async () => {
+      if (book.shelf_id) {
+        const shelfDetails = await fetchShelfById(book.shelf_id);
+        if (shelfDetails) {
+          setBookShelf(shelfDetails.name);
+        }
+      }
+    };
+
+    if (book.shelf_id) {
+      fetchBookShelf();
+    }
+  }, [book, fetchShelfById]);
 
   const handleClose = () => {
     setShowModal(false);
   };
-
-  const book = books.find((book) => book.id === id);
 
   let publishedYear = null;
 
@@ -86,11 +105,18 @@ export default function BookDetails() {
             )}
           </div>
           <div className="flex flex-col justify-start w-full mb-4">
-            {book.series && (
-              <div className="flex items-center bg-gray-300 px-2 py-1 rounded-full text-gray-900 text-s mb-2 me-auto">
-                📚 {book.series} {book.volume && `#${book.volume}`}
-              </div>
-            )}
+            <div className="flex items-center justify-start">
+              {book.series && (
+                <div className="flex items-center bg-gray-300 px-2 py-1 rounded-full text-gray-900 text-s mb-2">
+                  📚 {book.series} {book.volume && `#${book.volume}`}
+                </div>
+              )}
+              {bookShelf && (
+                <div className="flex items-center bg-gray-300 px-2 py-1 rounded-full text-gray-900 text-s mb-2 ml-2">
+                  🗄️ {bookShelf}
+                </div>
+              )}
+            </div>
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
               {book.title}
             </h2>
@@ -145,7 +171,7 @@ export default function BookDetails() {
         <div className="bg-gray-200 dark:bg-gray-800 p-4 rounded-lg mb-4 text-gray-700 dark:text-gray-300">
           <h3 className="text-xl font-bold mb-4">Your Notes</h3>
           <div className="flex flex-col space-y-4">
-            {["Price", "Quantity owned"].map((label) => (
+            {["Price", "Quantity"].map((label) => (
               <div key={label} className="flex justify-start items-start gap-2">
                 <span className="font-semibold">{label}:</span>
                 <span>{book[label.toLowerCase().replace(/\s+/g, "_")]}</span>

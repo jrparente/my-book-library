@@ -5,9 +5,11 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import SearchBookByISBN from "@/components/Dashboard/SearchBookByISBN/SearchBookByISBN";
 import SearchBookByQuery from "@/components/Dashboard/SearchBookByQuery/SearchBookByQuery";
+import { useShelves } from "@/contexts/ShelfContext";
 
 const AddNewBook = () => {
   const { addBook } = useBooks();
+  const { addBookToShelf } = useShelves();
   const route = useRouter();
   const initialValues = route.query.initialValues
     ? JSON.parse(route.query.initialValues)
@@ -30,7 +32,7 @@ const AddNewBook = () => {
 
   // Handle form submission
   const handleSubmit = async (formData) => {
-    console.log("Data to be sent to database:", formData.imageUrl);
+    console.log("Image data to be sent to database:", formData.imageUrl);
     // Validate form data
     if (!formData.title) {
       showNotification("Title is required", "error");
