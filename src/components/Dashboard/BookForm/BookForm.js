@@ -20,6 +20,10 @@ const formatDate = (date) => {
 const parseIntOrNull = (value) => (value ? parseInt(value) : null);
 const parseFloatOrNull = (value) => (value ? parseFloat(value) : null);
 
+const sanitizeFileName = (fileName) => {
+  return fileName.replace(/[^\w\d_\-.]+/gi, "");
+};
+
 const BookForm = ({
   initialValues: {
     id = null,
@@ -98,36 +102,46 @@ const BookForm = ({
 
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
-    const filePath = `${user.id}/${file.name}`;
+    const sanitizedFileName = sanitizeFileName(file.name);
+    const uniqueFileName = `${Date.now()}-${sanitizedFileName}`;
+    const filePath = `${user.id}/${uniqueFileName}`;
+
     console.log("File path:", filePath);
 
-    let { error, data } = await supabase.storage
+    let { error: uploadError, data: uploadData } = await supabase.storage
       .from("book-covers")
       .upload(filePath, file);
 
-    if (error) {
-      console.error("Upload error: ", error);
-    } else {
-      console.log("Upload data:", data);
+    if (uploadError) {
+      console.error("Upload error: ", uploadError);
+      return;
+    }
 
-      const publicUrl = await supabase.storage
-        .from("book-covers")
-        .getPublicUrl(filePath);
+    console.log("Upload data:", uploadData);
 
-      console.log("Public URL:", publicUrl);
+    const { error: urlError, data: urlData } = await supabase.storage
+      .from("book-covers")
+      .getPublicUrl(filePath);
 
-      if (publicUrl?.data?.publicUrl) {
-        setUploadedImageUrl(publicUrl.data.publicUrl);
-      }
+    if (urlError) {
+      console.error("Error retrieving public URL:", urlError);
+      return;
+    }
+
+    console.log("Public URL Data:", urlData);
+
+    if (urlData?.publicUrl) {
+      setUploadedImageUrl(urlData.publicUrl);
     }
 
     console.log("Uploaded image URL:", uploadedImageUrl);
     console.log("Form data image URL:", formData.imageUrl);
   };
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  console.log("selectedShelf", selectedShelf);
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     const formattedPublishedDate = formatDate(formData.published_date);
@@ -211,6 +225,10 @@ const BookForm = ({
                 src={uploadedImageUrl}
                 alt="Uploaded Preview"
                 className="mt-4 mb-4 h-32 w-32 object-cover"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = "/images/placeholder-image.png";
+                }}
               />
             )}
             <input

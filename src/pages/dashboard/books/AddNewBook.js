@@ -5,6 +5,8 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import SearchBookByISBN from "@/components/Dashboard/SearchBookByISBN/SearchBookByISBN";
 import SearchBookByQuery from "@/components/Dashboard/SearchBookByQuery/SearchBookByQuery";
+import SearchGoogleBooks from "@/components/Dashboard/SearchGoogleBooks/SearchGoogleBooks";
+
 import { useShelves } from "@/contexts/ShelfContext";
 
 const AddNewBook = () => {
@@ -55,7 +57,6 @@ const AddNewBook = () => {
         <h1 className="text-3xl mb-4 text-gray-800 dark:text-white">
           Add New Book
         </h1>
-
         {/* Tab controls */}
         <ul className="flex flex-wrap text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
           <li className="mr-2">
@@ -96,9 +97,21 @@ const AddNewBook = () => {
             >
               Search Book
             </button>
+          </li>{" "}
+          <li className="mr-2">
+            <button
+              onClick={() => setActiveTab("google")}
+              className={`inline-block p-4 rounded-t-lg 
+               ${
+                 activeTab === "google"
+                   ? "text-blue-600 bg-gray-100 dark:bg-gray-800 dark:text-blue-500"
+                   : ""
+               }`}
+            >
+              Search Google Books
+            </button>
           </li>
         </ul>
-
         {/* Display notification */}
         {notification && (
           <div
@@ -109,13 +122,13 @@ const AddNewBook = () => {
             {notification.message}
           </div>
         )}
-
         {/* Display content based on active tab */}
         {activeTab === "manual" && (
           <BookForm initialValues={initialValues} onSubmit={handleSubmit} />
         )}
         {activeTab === "isbn" && <SearchBookByISBN />}
-        {activeTab === "search" && <SearchBookByQuery />}
+        {activeTab === "search" && <SearchBookByQuery />}{" "}
+        {activeTab === "google" && <SearchGoogleBooks />}{" "}
       </div>
     </Layout>
   );
