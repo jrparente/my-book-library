@@ -34,9 +34,7 @@ const SignupPage = () => {
       setError(error.message);
     }
 
-    console.log("user created:", user);
     if (user) {
-      console.log("Reached the user insertion block");
       const userId = supabase.auth.getUser()?.id;
       console.log("userId", userId);
       // Insert the new user into the 'users' table
@@ -50,10 +48,8 @@ const SignupPage = () => {
       ]);
 
       if (error) {
-        console.log("Error inserting user:", error);
         setError(error.message);
       } else {
-        console.log("User inserted:", data);
         setConfirmationMessage(
           "Success! Check your email to finish signing up."
         );
@@ -62,7 +58,6 @@ const SignupPage = () => {
         }, 3000);
       }
     }
-    console.log("Exiting the user insertion block");
   };
 
   return (
