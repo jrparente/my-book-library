@@ -30,6 +30,7 @@ const SignupPage = () => {
 
     const { user, error } = await supabase.auth.signUp({ email, password });
     if (error) {
+      console.error("Signup Error:", error);
       setError(error.message);
     }
 
@@ -37,6 +38,7 @@ const SignupPage = () => {
     if (user) {
       console.log("Reached the user insertion block");
       const userId = supabase.auth.getUser()?.id;
+      console.log("userId", userId);
       // Insert the new user into the 'users' table
       const { data, error } = await supabase.from("users").insert([
         {
