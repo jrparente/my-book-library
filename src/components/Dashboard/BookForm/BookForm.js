@@ -152,7 +152,7 @@ const BookForm = ({
 
     // Add the created_at date as the current date
     const formattedCreatedDate = new Date().toISOString().split("T")[0];
-
+    console.log("type of uuid", typeof user.id, user.id);
     const bookDetails = {
       ...formData,
       volume, // converted to integer
@@ -163,7 +163,7 @@ const BookForm = ({
       user_id: user.id,
       imageUrl: uploadedImageUrl || formData.imageUrl,
       ...(!created_at && { created_at: formattedCreatedDate }),
-      shelf_id: selectedShelf,
+      ...(selectedShelf && { shelf_id: selectedShelf }),
     };
     console.log("bookDetails", bookDetails);
     onSubmit(bookDetails);

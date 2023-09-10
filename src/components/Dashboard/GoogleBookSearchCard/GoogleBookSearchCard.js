@@ -1,4 +1,9 @@
+import { useUser } from "@/contexts/UserContext";
+import { useRouter } from "next/router";
+
 function GoogleBookSearchCard({ book }) {
+  const { user } = useUser();
+  const router = useRouter();
   const {
     title,
     authors,
@@ -11,7 +16,6 @@ function GoogleBookSearchCard({ book }) {
     averageRating,
     ratingsCount,
     imageLinks,
-    previewLink,
   } = book;
 
   const isbn13 =
@@ -21,8 +25,37 @@ function GoogleBookSearchCard({ book }) {
     industryIdentifiers?.find((id) => id.type === "ISBN_10")?.identifier ||
     "N/A";
 
+  const addToLibrary = async () => {
+    const currentDate = new Date();
+    const formattedDate = `${currentDate.getFullYear()},${
+      currentDate.getMonth() + 1
+    },${currentDate.getDate()}`;
+
+    const bookDetails = {
+      title,
+      publisher,
+      published_date: publishedDate,
+      isbn: isbn13,
+      pages: Number(pageCount),
+      quantity: 1,
+      genre: categories,
+      summary: description,
+      imageUrl: imageLinks?.thumbnail,
+      user_id: user.id,
+      created_at: formattedDate,
+    };
+
+    router.replace({
+      pathname: "/dashboard/books/AddNewBook",
+      query: {
+        initialValues: JSON.stringify(bookDetails),
+        activeTab: "manual",
+      },
+    });
+  };
+
   return (
-    <div className="p-4 border rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
+    <div className="flex flex-col flex-wrap gap-1 p-2 sm:p-4 md:p-6 bg-white border rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
       <h3 className="text-lg font-bold dark:text-white">{title}</h3>
       <p className="text-gray-700 dark:text-gray-400">
         <span className="font-semibold">Authors:</span>{" "}
@@ -66,9 +99,13 @@ function GoogleBookSearchCard({ book }) {
           alt={title || "No image available"}
         />
       </div>
-      <a href={previewLink} target="_blank" rel="noopener noreferrer">
-        Preview Book
-      </a>
+
+      <button
+        className="inline-flex items-center px-6 py-3 text-base font-medium text-center text-white bg-blue-600 hover:bg-blue-700 dark:hover:bg-blue-800 rounded-lg focus:ring focus:ring-blue-300 focus:ring-opacity-50 me-auto mt-2"
+        onClick={addToLibrary}
+      >
+        Edit and Confirm Details
+      </button>
     </div>
   );
 }

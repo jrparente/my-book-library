@@ -17,7 +17,7 @@ const SignupPage = () => {
     setError("");
 
     // Check if all fields are filled out
-    if (!email || !password || !firstName || !lastName || !confirmPassword) {
+    if (!email || !password || !firstName || !lastName || !passwordConfirm) {
       setError("All fields are required.");
       return;
     }
