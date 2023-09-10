@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import supabase from "@/lib/supabaseClient";
+import { useRouter } from "next/router";
 
 const SignupPage = () => {
   const [firstName, setFirstName] = useState("");
@@ -8,8 +9,20 @@ const SignupPage = () => {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [error, setError] = useState(null);
+  const [confirmationMessage, setConfirmationMessage] = useState("");
+  const router = useRouter();
 
   const handleSignup = async () => {
+    setConfirmationMessage("");
+    setError("");
+
+    // Check if all fields are filled out
+    if (!email || !password || !firstName || !lastName || !confirmPassword) {
+      setError("All fields are required.");
+      return;
+    }
+
+    // Check if passwords match
     if (password !== passwordConfirm) {
       setError("Passwords do not match");
       return;
@@ -20,9 +33,34 @@ const SignupPage = () => {
       setError(error.message);
     }
 
+    console.log("user created:", user);
     if (user) {
-      // Redirect or do something with the user object
+      console.log("Reached the user insertion block");
+      const userId = supabase.auth.getUser()?.id;
+      // Insert the new user into the 'users' table
+      const { data, error } = await supabase.from("users").insert([
+        {
+          id: userId,
+          email: user.email,
+          first_name: firstName,
+          last_name: lastName,
+        },
+      ]);
+
+      if (error) {
+        console.log("Error inserting user:", error);
+        setError(error.message);
+      } else {
+        console.log("User inserted:", data);
+        setConfirmationMessage(
+          "Success! Check your email to finish signing up."
+        );
+        setTimeout(() => {
+          router.push("/login");
+        }, 3000);
+      }
     }
+    console.log("Exiting the user insertion block");
   };
 
   return (
@@ -37,6 +75,9 @@ const SignupPage = () => {
               Sign up for an account
             </h1>
             {error && <div className="text-red-500">{error}</div>}
+            {confirmationMessage && (
+              <div className="text-green-500">{confirmationMessage}</div>
+            )}
             <form className="space-y-4 md:space-y-6">
               <div>
                 <label
