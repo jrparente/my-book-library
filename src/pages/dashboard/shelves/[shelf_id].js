@@ -2,11 +2,14 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Layout from "../layout";
 import { useShelves } from "@/contexts/ShelfContext";
+import supabase from "@/lib/supabaseClient";
 
-export default function UpdateShelf() {
+export default function UpdateShelf({ shelf_books }) {
   const router = useRouter();
   const { shelf_id } = router.query;
   const { updateShelf, fetchShelfById } = useShelves();
+
+  console.log("books is shelf", shelf_id, shelf_books);
 
   const [shelfData, setShelfData] = useState({
     name: "",
@@ -34,15 +37,12 @@ export default function UpdateShelf() {
   // Update shelf data when the form is submitted
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitting form...", shelfData);
     const updated = await updateShelf(
       shelf_id,
       shelfData.name,
       shelfData.description
     );
-    console.log("Is shelf updated?", updated);
     if (updated) {
-      console.log("Navigating to dashboard/shelves...");
       router.push("/dashboard/shelves");
     } else {
       alert("Failed to update shelf.");
@@ -97,3 +97,27 @@ export default function UpdateShelf() {
     </Layout>
   );
 }
+
+export const getServerSideProps = async (context) => {
+  const { shelf_id } = context.params;
+
+  const { data: shelf_books, error } = await supabase
+    .from("books")
+    .select("*")
+    .eq("shelf_id", shelf_id);
+
+  if (error) {
+    console.error(`Supabase Error: ${error.message}`);
+    return {
+      props: {
+        error: error.message,
+      },
+    };
+  }
+
+  return {
+    props: {
+      shelf_books,
+    },
+  };
+};

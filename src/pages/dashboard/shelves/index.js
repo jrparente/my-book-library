@@ -74,10 +74,7 @@ export default function ShelfDashboard() {
                   {shelf.name}
                 </h2>
                 <div className="flex space-x-2">
-                  <Link
-                    className="text-blue-500 hover:underline"
-                    href={`/dashboard/shelves/${shelf.shelf_id}`}
-                  >
+                  <Link href={`/dashboard/shelves/${shelf.shelf_id}`}>
                     {/* Update Icon */}
                     🔄
                   </Link>
