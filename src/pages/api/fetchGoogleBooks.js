@@ -1,5 +1,9 @@
 // pages/api/fetchGoogleBooks.js
 export default async function handler(req, res) {
+  // if (req.query.API_ROUTE_SECRET !== process.env.API_ROUTE_SECRET) {
+  //   return res.status(401).send("You are not authorized to call this API.");
+  // }
+
   if (req.method !== "GET") {
     return res.status(405).end(); // Method Not Allowed
   }

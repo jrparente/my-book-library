@@ -87,19 +87,6 @@ const AddNewBook = () => {
           </li>
           <li className="mr-2">
             <button
-              onClick={() => setActiveTab("search")}
-              className={`inline-block p-4 rounded-t-lg 
-                 ${
-                   activeTab === "search"
-                     ? "text-blue-600 bg-gray-100 dark:bg-gray-800 dark:text-blue-500"
-                     : ""
-                 }`}
-            >
-              Search Book
-            </button>
-          </li>{" "}
-          <li className="mr-2">
-            <button
               onClick={() => setActiveTab("google")}
               className={`inline-block p-4 rounded-t-lg 
                ${
@@ -108,7 +95,7 @@ const AddNewBook = () => {
                    : ""
                }`}
             >
-              Search Google Books
+              Search by Keyword
             </button>
           </li>
         </ul>
@@ -127,8 +114,7 @@ const AddNewBook = () => {
           <BookForm initialValues={initialValues} onSubmit={handleSubmit} />
         )}
         {activeTab === "isbn" && <SearchBookByISBN />}
-        {activeTab === "search" && <SearchBookByQuery />}{" "}
-        {activeTab === "google" && <SearchGoogleBooks />}{" "}
+        {activeTab === "google" && <SearchGoogleBooks />}
       </div>
     </Layout>
   );

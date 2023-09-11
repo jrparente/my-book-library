@@ -15,7 +15,7 @@ const SignupPage = () => {
   const handleSignup = async () => {
     setConfirmationMessage("");
     setError("");
-
+    console.log("firstName:", firstName, "lastName:", lastName);
     // Check if all fields are filled out
     if (!email || !password || !firstName || !lastName || !passwordConfirm) {
       setError("All fields are required.");
@@ -28,35 +28,20 @@ const SignupPage = () => {
       return;
     }
 
-    const { user, error } = await supabase.auth.signUp({ email, password });
+    const { user, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          firstName: firstName,
+          lastName: lastName,
+        },
+      },
+    });
     if (error) {
       console.error("Signup Error:", error);
+      console.log("Signup Error:", error);
       setError(error.message);
-    }
-
-    if (user) {
-      const userId = supabase.auth.getUser()?.id;
-      console.log("userId", userId);
-      // Insert the new user into the 'users' table
-      const { data, error } = await supabase.from("users").insert([
-        {
-          id: userId,
-          email: user.email,
-          first_name: firstName,
-          last_name: lastName,
-        },
-      ]);
-
-      if (error) {
-        setError(error.message);
-      } else {
-        setConfirmationMessage(
-          "Success! Check your email to finish signing up."
-        );
-        setTimeout(() => {
-          router.push("/login");
-        }, 3000);
-      }
     }
   };
 

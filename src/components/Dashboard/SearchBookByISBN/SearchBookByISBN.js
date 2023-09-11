@@ -114,6 +114,8 @@ export default function SearchBookByISBN() {
     });
   };
 
+  console.log(book);
+
   return (
     <div className="mt-4 max-w-4xl">
       <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
@@ -142,9 +144,9 @@ export default function SearchBookByISBN() {
           </h2>
           <div className="flex flex-col flex-wrap p-2 sm:p-4 md:p-6 bg-white border rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
             <img
-              src={book.imageLinks.thumbnail}
+              src={book.imageLinks?.thumbnail || ""}
+              alt={title || "No image available"}
               className="w-1/4 md:w-1/6 lg:w-1/8 object-cover mb-4 rounded-lg shadow"
-              alt="Book cover"
             />
             <h2 className="text-2xl font-extrabold mb-2 text-gray-900 dark:text-white">
               {book.title}

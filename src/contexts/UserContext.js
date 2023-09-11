@@ -76,6 +76,8 @@ export const UserProvider = ({ children }) => {
     if (error) {
       setError("Error logging out: " + error.message);
     }
+    setUser(null);
+    router.push("/");
   };
 
   const value = {

@@ -17,14 +17,12 @@ const Layout = ({ children }) => {
   // Check if user is logged in
   useEffect(() => {
     if (!user) {
-      console.log("User not logged in. Redirecting to login page.");
-      router.push("/login"); // Redirect to the sign-in page if the user is not logged in
+      router.push("/");
     }
-  }, [user, router]);
+  }, [user, router, userProfile]);
 
   const handleLogout = async () => {
-    await logout(); // Assuming `logout` is a function that clears user session
-    router.push("/"); // Redirecting to login page
+    await logout();
   };
 
   return (
@@ -52,14 +50,14 @@ const Layout = ({ children }) => {
           >
             <div className="px-4 py-3" role="none">
               <p className="text-sm text-gray-900 dark:text-white" role="none">
-                {userProfile[0].firstName || "User"}{" "}
-                {userProfile[0].lastName || "Name"}
+                {user.user_metadata.firstName || "User"}{" "}
+                {user.user_metadata.lastName || "Name"}
               </p>
               <p
                 className="text-sm font-medium text-gray-900 truncate dark:text-gray-300"
                 role="none"
               >
-                {userProfile[0].email || "user@email.com"}
+                {user?.email || "user@email.com"}
               </p>
             </div>
             <ul className="py-1" role="none">
