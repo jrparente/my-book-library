@@ -45,7 +45,7 @@ const BookCard = ({ book }) => {
   return (
     <Link
       href={`/dashboard/books/${book.id}`}
-      className="group max-w-lg aspect-w-7 aspect-h-1 w-full overflow-hidden xl:aspect-w-7 xl:aspect-h-6"
+      className="group max-w-lg aspect-w-7 aspect-h-1 w-full overflow-hidden xl:aspect-w-6 xl:aspect-h-5"
     >
       <div class="relative m-0 shadow-lg flex">
         <div className="flex-no-shrink mx-auto">
@@ -67,8 +67,8 @@ const BookCard = ({ book }) => {
           />
         </div>
         <div className="flex-1 relative">
-          <div className="flex flex-col py-1 px-4 items-start">
-            <h3 className="text-xl 2xl:text-2xl font-bold text-gray-900 dark:text-white mb-2">
+          <div className="flex flex-col py-1 px-4 items-start h-full">
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
               {book.title}
             </h3>
             {book.author_first_name && book.author_last_name && (
@@ -89,7 +89,7 @@ const BookCard = ({ book }) => {
               </div>
             )}
 
-            <div className="mt-auto hidden sm:flex sm:flex-col ">
+            <div className="mt-auto flex flex-col lg:hidden">
               {publishedYear && (
                 <div className="text-xs text-gray-600 dark:text-white">
                   <span className="font-semibold">Year:</span> {publishedYear}
