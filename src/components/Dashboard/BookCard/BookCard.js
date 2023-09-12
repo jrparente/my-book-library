@@ -1,5 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
+import { useState } from "react";
+
+function cn(...classes) {
+  return classes.filter(Boolean).join(" ");
+}
 
 const getStatusColor = (status) => {
   switch (status) {
@@ -21,6 +26,7 @@ const getStatusColor = (status) => {
 };
 
 const BookCard = ({ book }) => {
+  const [isLoading, setLoading] = useState(true);
   if (!book) return null;
 
   let publishedYear = null;
@@ -39,62 +45,78 @@ const BookCard = ({ book }) => {
   return (
     <Link
       href={`/dashboard/books/${book.id}`}
-      className="flex flex-wrap p-2 sm:p-4  bg-white border rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+      className="group max-w-lg mx-auto block aspect-w-1 aspect-h-1 w-full overflow-hidden  xl:aspect-w-7 xl:aspect-h-8"
     >
-      <div className="flex flex-col w-full lg:w-1/3 pr-4">
-        <Image
-          src={book?.imageUrl ? book.imageUrl : "/images/placeholder-image.png"}
-          alt="Book cover"
-          width={200}
-          height={350}
-          objectFit="cover"
-          className="w-full mx-auto lg:mx-0"
-        />
-        {book.status && (
-          <div
-            className="px-2 py-1 rounded-full text-gray-900 text-xs mt-2 me-auto"
-            style={{ backgroundColor: getStatusColor(book.status) }}
-          >
-            <span>{book.status}</span>
-          </div>
-        )}
-      </div>
-      <div className="w-full lg:w-2/3 flex flex-col justify-between mt-4 lg:mt-0">
-        <div className="flex flex-col ">
-          {book.series && (
-            <div className="flex items-center bg-gray-300 px-2 py-1 rounded-full mb-2 me-auto text-sm text-gray-900">
-              📚 {book.series} {book.volume && `#${book.volume}`}
-            </div>
-          )}
-          <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-            {book.title}
-          </h3>
-          {book.author_first_name && book.author_last_name && (
-            <p className="text-md font-medium text-gray-600 mb-2 dark:text-white">{`${book.author_first_name} ${book.author_last_name}`}</p>
-          )}
-          <div className="flex flex-row gap-2">
-            {publishedYear && (
-              <div className="text-xs font-bold text-gray-600 dark:text-white">
-                {publishedYear}
+      <div class="relative m-0 shadow-lg flex">
+        <div className="flex-no-shrink mx-auto">
+          <Image
+            src={
+              book?.imageUrl ? book.imageUrl : "/images/placeholder-image.png"
+            }
+            alt="Book cover"
+            loading="lazy"
+            width={200}
+            height={350}
+            className={cn(
+              "duration-700 ease-in-out group-hover:opacity-75",
+              isLoading
+                ? "scale-110 blur-2xl grayscale"
+                : "scale-100 blur-0 grayscale-0"
+            )}
+            onLoadingComplete={() => setLoading(false)}
+          />
+        </div>
+        <div className="flex-1 relative">
+          <div className="flex flex-col py-1 px-4 items-start h-full">
+            {book.series && (
+              <div className="flex items-center bg-gray-300 px-2 py-1 rounded-full mb-2 text-xs text-gray-900">
+                {book.series} {book.volume && `#${book.volume}`}
               </div>
             )}
-            {book.pages && (
-              <div className="text-xs text-gray-600 dark:text-white">{`${book.pages} pages`}</div>
+            {book.status && (
+              <div
+                className="px-2 py-1 rounded-full text-gray-900 text-xs"
+                style={{ backgroundColor: getStatusColor(book.status) }}
+              >
+                <span>{book.status}</span>
+              </div>
             )}
-          </div>
+            <h3 className="text-xl 2xl:text-2xl font-bold text-gray-900 dark:text-white mb-2">
+              {book.title}
+            </h3>
+            {book.author_first_name && book.author_last_name && (
+              <p className="text-md font-medium text-gray-600 mb-2 dark:text-white">{`${book.author_first_name} ${book.author_last_name}`}</p>
+            )}
 
-          {book.isbn && (
-            <div className="text-xs text-gray-600 dark:text-white">{`ISBN: ${book.isbn}`}</div>
-          )}
-        </div>
-        <div className="mt-2">
-          {book.quantity && (
-            <div className="text-xs text-gray-600 dark:text-white">{`Copies: ${book.quantity}`}</div>
-          )}
-          {book.created_at && (
-            <div className="text-xs text-gray-600 dark:text-white">{`Added: ${book.created_at}`}</div>
-          )}
-          {/* More info can go here */}
+            <div className="mt-auto hidden sm:flex sm:flex-col ">
+              {publishedYear && (
+                <div className="text-xs text-gray-600 dark:text-white">
+                  <span className="font-semibold">Year:</span> {publishedYear}
+                </div>
+              )}
+              {book.pages && (
+                <div className="text-xs text-gray-600 dark:text-white">
+                  <span className="font-semibold">Pages:</span> {book.pages}
+                </div>
+              )}
+              {book.quantity && (
+                <div className="text-xs text-gray-600 dark:text-white">
+                  <span className="font-semibold">Copies:</span> {book.quantity}
+                </div>
+              )}
+              {book.created_at && (
+                <div className="text-xs text-gray-600 dark:text-white">
+                  <span className="font-semibold">Added:</span>{" "}
+                  {book.created_at}
+                </div>
+              )}
+              {book.isbn && (
+                <div className="text-xs text-gray-600 dark:text-white hidden sm:flex sm:flex-col">
+                  <span className="font-semibold">ISBN:</span> {book.isbn}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </Link>
