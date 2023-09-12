@@ -6,7 +6,7 @@ import useToggle from "@/lib/useToggle";
 const ProfileSettings = () => {
   const { userProfile, updateUserProfile } = useUser();
   const [notification, setNotification] = useState("");
-  console.log(userProfile);
+
   const [isEditing, toggleEditing] = useToggle(false);
   const initialFormData = userProfile
     ? {
@@ -144,7 +144,7 @@ const ProfileSettings = () => {
             </button>
           </form>
         ) : (
-          <div className="profile-card">
+          <div>
             {/* Profile information */}
             <div className="flex space-x-4 mb-4">
               <div className="flex-1 p-4 bg-gray-100 dark:bg-gray-800 rounded">
@@ -157,7 +157,7 @@ const ProfileSettings = () => {
             </div>
             <button
               onClick={toggleEditing}
-              className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-primary-700 hover:bg-primary-600 rounded-lg ml-2"
+              className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-primary-700 hover:bg-primary-600 rounded-lg"
             >
               Edit Profile
             </button>

@@ -3,13 +3,18 @@ import Link from "next/link";
 import { useUser } from "@/contexts/UserContext";
 import { useShelves } from "@/contexts/ShelfContext";
 import Layout from "../layout";
+import { useBooks } from "@/contexts/BooksContext";
+import DeleteModal from "@/components/Dashboard/DeleteModal/DeleteModal";
 
 export default function ShelfDashboard() {
   const { user } = useUser();
   const { shelves, fetchShelves, addShelf, updateShelf, deleteShelf } =
     useShelves();
+  const { books } = useBooks();
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredShelves, setFilteredShelves] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [currentShelfId, setCurrentShelfId] = useState(null);
 
   useEffect(() => {
     if (!user || !user.id) return;
@@ -22,6 +27,25 @@ export default function ShelfDashboard() {
       });
     }
   }, [user, fetchShelves]);
+
+  const handleShowModal = (id) => {
+    setCurrentShelfId(id);
+    setShowModal(true);
+  };
+
+  const handleClose = () => {
+    setShowModal(false);
+  };
+
+  const handleDeleteShelf = async () => {
+    const success = await deleteShelf(currentShelfId);
+    if (success) {
+      // Handle successful delete, like refetching shelves
+      fetchShelves(user.id);
+    }
+    setCurrentShelfId(null);
+    setShowModal(false);
+  };
 
   return (
     <Layout>
@@ -64,31 +88,42 @@ export default function ShelfDashboard() {
 
         {/* Shelf List */}
         <ul className="mt-4 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-          {filteredShelves.map((shelf) => (
-            <li
-              key={shelf.shelf_id}
-              className="flex flex-col gap-2 border rounded p-4 hover:shadow-lg transition-shadow duration-200"
-            >
-              <div className="flex justify-between items-start">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {shelf.name}
-                </h2>
-                <div className="flex space-x-2">
-                  <Link href={`/dashboard/shelves/${shelf.shelf_id}`}>
-                    {/* Update Icon */}
-                    🔄
-                  </Link>
-                  <button onClick={() => deleteShelf(shelf.shelf_id)}>
-                    {/* Delete Icon */}
-                    🗑️
-                  </button>
+          {filteredShelves.map((shelf) => {
+            const bookCount = books.filter(
+              (book) => book.shelf_id === shelf.shelf_id
+            ).length;
+            return (
+              <li
+                key={shelf.shelf_id}
+                className="flex flex-col gap-2 border rounded p-4 hover:shadow-lg transition-shadow duration-200"
+              >
+                <div className="flex justify-between items-start">
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                    <Link href={`/dashboard/shelves/${shelf.shelf_id}`}>
+                      {shelf.name}
+                    </Link>
+                  </h2>
+                  <div className="flex space-x-2">
+                    <Link href={`/dashboard/shelves/${shelf.shelf_id}`}>
+                      🔄
+                    </Link>
+                    <button onClick={() => handleShowModal(shelf.shelf_id)}>
+                      🗑️
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <p>{shelf.description}</p>
-            </li>
-          ))}
+                <p className="font-semibold">{bookCount} books</p>
+                <p className="text-sm">{shelf.description}</p>
+              </li>
+            );
+          })}
         </ul>
       </div>
+      <DeleteModal
+        showModal={showModal}
+        handleDelete={handleDeleteShelf}
+        handleClose={handleClose}
+      />
     </Layout>
   );
 }

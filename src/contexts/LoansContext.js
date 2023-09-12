@@ -12,6 +12,9 @@ export const LoansProvider = ({ children, userId }) => {
   const [loading, setLoading] = useState(true);
 
   const fetchLoanedBooks = async (userId) => {
+    if (!userId) {
+      return;
+    }
     const { data, error } = await supabase
       .from("loanedbooks")
       .select("*")
@@ -96,8 +99,6 @@ export const LoansProvider = ({ children, userId }) => {
   };
 
   return (
-    <LoansContext.Provider value={value}>
-      {!loading && children}
-    </LoansContext.Provider>
+    <LoansContext.Provider value={value}>{children}</LoansContext.Provider>
   );
 };

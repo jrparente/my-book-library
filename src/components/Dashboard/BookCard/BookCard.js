@@ -68,6 +68,13 @@ const BookCard = ({ book }) => {
         </div>
         <div className="flex-1 relative">
           <div className="flex flex-col py-1 px-4 items-start h-full">
+            <h3 className="text-xl 2xl:text-2xl font-bold text-gray-900 dark:text-white mb-2">
+              {book.title}
+            </h3>
+            {book.author_first_name && book.author_last_name && (
+              <p className="text-md font-medium text-gray-600 mb-2 dark:text-white">{`${book.author_first_name} ${book.author_last_name}`}</p>
+            )}
+
             {book.series && (
               <div className="flex items-center bg-gray-300 px-2 py-1 rounded-full mb-2 text-xs text-gray-900">
                 {book.series} {book.volume && `#${book.volume}`}
@@ -80,12 +87,6 @@ const BookCard = ({ book }) => {
               >
                 <span>{book.status}</span>
               </div>
-            )}
-            <h3 className="text-xl 2xl:text-2xl font-bold text-gray-900 dark:text-white mb-2">
-              {book.title}
-            </h3>
-            {book.author_first_name && book.author_last_name && (
-              <p className="text-md font-medium text-gray-600 mb-2 dark:text-white">{`${book.author_first_name} ${book.author_last_name}`}</p>
             )}
 
             <div className="mt-auto hidden sm:flex sm:flex-col ">

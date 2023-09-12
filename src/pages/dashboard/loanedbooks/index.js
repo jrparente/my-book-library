@@ -10,15 +10,17 @@ const getStatusColor = (isOverdue) => {
 };
 
 const LoanedBooks = () => {
-  const { loanedBooks, fetchLoanedBooks } = useLoans();
+  const { loanedBooks, fetchLoanedBooks, loading } = useLoans();
   const { books } = useBooks();
   const { user } = useUser();
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredLoans, setFilteredLoans] = useState([]);
 
   useEffect(() => {
-    fetchLoanedBooks(user.id);
-  }, []);
+    if (user && user.id) {
+      fetchLoanedBooks(user.id);
+    }
+  }, [user]);
 
   useEffect(() => {
     setFilteredLoans(
@@ -83,6 +85,7 @@ const LoanedBooks = () => {
             <strong>Overdue Loans:</strong> {overdueLoans}
           </div>
         </div>
+
         <div className="flex flex-col mt-8">
           <div className="mt-4 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
             {filteredLoans.map((loan, index) => {
