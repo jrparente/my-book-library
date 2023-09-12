@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useUser } from "@/contexts/UserContext";
 import Layout from "../layout";
 import useToggle from "@/lib/useToggle";
+import { useTheme } from "@/contexts/ThemeContext";
 
 const ProfileSettings = () => {
+  const { isDarkMode, setIsDarkMode } = useTheme();
   const { userProfile, updateUserProfile } = useUser();
   const [notification, setNotification] = useState("");
-
   const [isEditing, toggleEditing] = useToggle(false);
   const initialFormData = userProfile
     ? {
@@ -21,6 +22,10 @@ const ProfileSettings = () => {
       };
 
   const [formData, setFormData] = useState(initialFormData);
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+  };
 
   // Update formData when userProfile changes
   useEffect(() => {
@@ -144,15 +149,40 @@ const ProfileSettings = () => {
             </button>
           </form>
         ) : (
-          <div>
+          <div className="flex flex-col space-y-6 items-start">
             {/* Profile information */}
-            <div className="flex space-x-4 mb-4">
+            <div className="flex space-x-4 mb-4 w-full">
               <div className="flex-1 p-4 bg-gray-100 dark:bg-gray-800 rounded">
                 <strong>Name:</strong> {formData.firstName} {formData.lastName}
               </div>
 
               <div className="flex-1 p-4 bg-gray-100 dark:bg-gray-800 rounded">
                 <strong>Email:</strong> {formData.email}
+              </div>
+            </div>
+
+            <div className="flex flex-col items-center gap-1">
+              <p>Theme preference:</p>
+              <div className="flex items-center">
+                <span className="text-gray-700 dark:text-gray-300 mr-2">
+                  {isDarkMode ? "Dark" : "Light"}
+                </span>
+                <label
+                  htmlFor="darkModeToggle"
+                  className="flex items-center cursor-pointer"
+                >
+                  <div className="relative">
+                    <input
+                      type="checkbox"
+                      id="darkModeToggle"
+                      checked={isDarkMode}
+                      onChange={toggleDarkMode}
+                      className="hidden"
+                    />
+                    <div className="toggle__line w-10 h-6 bg-gray-400 rounded-full shadow-inner"></div>
+                    <div className="toggle__dot absolute w-6 h-6 bg-white rounded-full shadow inset-y-0 -left-1"></div>
+                  </div>
+                </label>
               </div>
             </div>
             <button
