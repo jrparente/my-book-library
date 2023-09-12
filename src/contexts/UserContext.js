@@ -80,6 +80,35 @@ export const UserProvider = ({ children }) => {
     router.push("/");
   };
 
+  const updateUserProfile = async (newData) => {
+    if (!user) return false;
+
+    try {
+      const { data, error } = await supabase
+        .from("users") // Replace with your actual table name
+        .update({
+          first_name: newData.firstName,
+          last_name: newData.lastName,
+          email: newData.email,
+          // ... any other fields
+        })
+        .eq("id", user.id);
+
+      if (error) {
+        console.error("Error updating profile:", error);
+        return false;
+      }
+
+      // Update local state if needed
+      setUserProfile(data);
+
+      return true;
+    } catch (err) {
+      console.error("An error occurred:", err);
+      return false;
+    }
+  };
+
   const value = {
     user,
     session,
@@ -87,6 +116,7 @@ export const UserProvider = ({ children }) => {
     error,
     userProfile,
     logout,
+    updateUserProfile,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
