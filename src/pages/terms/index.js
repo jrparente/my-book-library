@@ -18,7 +18,7 @@ export default function TermsAndConditions() {
             <h2 className="font-semibold text-2xl my-4">Introduction</h2>
             <p>
               These Terms and Conditions govern your use of our service and
-              constitute a legal agreement between you and [Your Company Name].
+              constitute a legal agreement between you and My Book Library.
             </p>
 
             <h2 className="font-semibold text-2xl my-4">Usage Rules</h2>
@@ -46,7 +46,7 @@ export default function TermsAndConditions() {
               Limitation of Liability
             </h2>
             <p>
-              [Your Company Name] will not be liable for any indirect,
+              My Book Library will not be liable for any indirect,
               consequential, or incidental damages arising out of or in
               connection with your use of our service.
             </p>

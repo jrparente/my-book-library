@@ -51,7 +51,7 @@ export default function Features() {
                   Loan Tracking
                 </h3>
                 <p className="text-gray-500 dark:text-gray-400">
-                  Keep tabs on books you've loaned to friends and family.
+                  Keep tabs on books you&apos;ve loaned to friends and family.
                   Receive reminders and notifications, ensuring you never lose
                   track of a borrowed book again.
                 </p>
@@ -115,7 +115,7 @@ export default function Features() {
         </section>
         <section className="bg-white dark:bg-gray-900">
           <div className="gap-8 items-center py-8 px-4 mx-auto max-w-screen-xl xl:gap-16 md:grid md:grid-cols-2 sm:py-16 lg:px-6">
-            {/* You can replace the 'src' with the actual image URLs */}
+            {/* You can replace the &apos;src&apos; with the actual image URLs */}
             {/* <img
               className="w-full dark:hidden"
               src="/path/to/light-mode-image.svg"
