@@ -101,7 +101,7 @@ export default function Aside({ asideOpen }) {
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="currentColor"
-                viewBox="0 0 20 20"
+                viewBox="0 0 23 23"
               >
                 <path
                   stroke="currentColor"
