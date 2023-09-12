@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import supabase from "@/lib/supabaseClient";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import Link from "next/link";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -45,7 +46,7 @@ const LoginPage = () => {
       <section className="bg-gray-50 dark:bg-gray-900">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
           <h1 className="text-2xl font-semibold text-gray-900 dark:text-white mb-6">
-            My Book Library
+            <Link href="/">My Book Library</Link>
           </h1>
           <div className="w-full bg-white rounded-lg shadow dark:bg-gray-800 dark:border dark:border-gray-700 sm:max-w-md xl:p-0">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -102,12 +103,12 @@ const LoginPage = () => {
                       Remember me
                     </label>
                   </div>
-                  <button
-                    onClick={() => router.push("/password-reset")}
+                  <Link
+                    href="/password-reset"
                     className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
                   >
                     Forgot Password?
-                  </button>
+                  </Link>
                 </div>
                 <button
                   type="button"
@@ -121,13 +122,12 @@ const LoginPage = () => {
                 </button>
                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                   Don&apos;t have an account yet?{" "}
-                  <button
-                    type="submit"
-                    onClick={() => router.push("/signup")}
+                  <Link
+                    href="/signup"
                     className="font-medium text-primary-600 hover:underline dark:text-primary-500"
                   >
                     Sign up
-                  </button>
+                  </Link>
                 </p>
               </form>
             </div>

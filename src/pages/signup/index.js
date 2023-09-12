@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import supabase from "@/lib/supabaseClient";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const SignupPage = () => {
   const [firstName, setFirstName] = useState("");
@@ -49,7 +50,7 @@ const SignupPage = () => {
     <section className="bg-gray-50 dark:bg-gray-900">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <h1 className="text-2xl font-semibold text-gray-900 dark:text-white mb-6">
-          My Book Library
+          <Link href="/">My Book Library</Link>
         </h1>
         <div className="w-full bg-white rounded-lg shadow dark:bg-gray-800 dark:border dark:border-gray-700 sm:max-w-md xl:p-0">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -154,6 +155,15 @@ const SignupPage = () => {
               >
                 Sign Up
               </button>
+              <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+                Already have an account?{" "}
+                <Link
+                  href="/login"
+                  className="font-medium text-primary-600 hover:underline dark:text-primary-500"
+                >
+                  Login
+                </Link>
+              </p>
             </form>
           </div>
         </div>

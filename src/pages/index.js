@@ -13,10 +13,14 @@ export default function Home() {
       <main className="flex flex-col items-center justify-center min-h-screen py-2 bg-white dark:bg-gray-900">
         <div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-12">
           <h1 className="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
-            Welcome to My Book Library
+            Elevate Your Reading Journey
           </h1>
           <p className="mb-8 text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400">
-            Your one-stop solution for managing, sharing, and discovering books.
+            Organize, share, and discover your perfect reading journey
+            effortlessly.
+          </p>
+          <p className="mb-8 text-sm text-gray-500 italic lg:text-md dark:text-gray-400">
+            Available on desktop. Android and iOS versions coming soon.
           </p>
           <div className="flex flex-col mb-8 lg:mb-16 space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
             <Link
