@@ -6,9 +6,23 @@ const Footer = () => {
       <div className="mx-auto max-w-screen-xl">
         <div className="md:flex md:justify-between">
           <div className="mb-6 md:mb-0">
-            <Link href="/" className="flex items-center">
-              {/* You can place your logo image here */}
-              <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+            <Link className="flex items-center" href="/">
+              <svg
+                className="w-6 h-6 text-gray-800 dark:text-white"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 20 18"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10 16.5c0-1-8-2.7-9-2V1.8c1-1 9 .707 9 1.706M10 16.5V3.506M10 16.5c0-1 8-2.7 9-2V1.8c-1-1-9 .707-9 1.706"
+                />
+              </svg>
+              <span className="self-center text-2xl tracking-tight font-extrabold whitespace-nowrap dark:text-white ml-1">
                 My Book Library
               </span>
             </Link>

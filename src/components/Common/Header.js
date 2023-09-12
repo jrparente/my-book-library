@@ -1,26 +1,61 @@
+import { useUser } from "@/contexts/UserContext";
 import useToggle from "@/lib/useToggle";
 import Link from "next/link";
 
 const Header = () => {
   const [menuOpen, toggleMenu] = useToggle(false);
+  const { user } = useUser();
 
   return (
     <header>
       <nav className="bg-white border-gray-200 dark:bg-gray-900">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <Link className="flex items-center" href="/">
-            <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
+            <svg
+              className="w-6 h-6 text-gray-800 dark:text-white"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 20 18"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M10 16.5c0-1-8-2.7-9-2V1.8c1-1 9 .707 9 1.706M10 16.5V3.506M10 16.5c0-1 8-2.7 9-2V1.8c-1-1-9 .707-9 1.706"
+              />
+            </svg>
+            <span className="self-center text-xl tracking-tight font-extrabold whitespace-nowrap dark:text-white ml-1">
               My Book Library
             </span>
           </Link>
 
           <div className="flex md:order-2">
-            <button
-              type="button"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            >
-              Get started
-            </button>
+            {user ? (
+              <Link
+                href="/dashboard"
+                type="button"
+                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              >
+                Get started
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href="/signup"
+                  className="hidden sm:inline-flex text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                >
+                  Sign Up
+                </Link>
+                <Link
+                  href="/login"
+                  className="hidden lg:inline-flex text-blue-700 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-800 ml-2"
+                >
+                  Sign In
+                </Link>
+              </>
+            )}
             <button
               data-collapse-toggle="navbar-cta"
               type="button"
