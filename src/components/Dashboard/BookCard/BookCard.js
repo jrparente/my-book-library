@@ -45,7 +45,7 @@ const BookCard = ({ book }) => {
   return (
     <Link
       href={`/dashboard/books/${book.id}`}
-      className="group max-w-lg mx-auto block aspect-w-1 aspect-h-1 w-full overflow-hidden  xl:aspect-w-7 xl:aspect-h-8"
+      className="group max-w-lg aspect-w-7 aspect-h-1 w-full overflow-hidden xl:aspect-w-7 xl:aspect-h-6"
     >
       <div class="relative m-0 shadow-lg flex">
         <div className="flex-no-shrink mx-auto">
@@ -67,7 +67,7 @@ const BookCard = ({ book }) => {
           />
         </div>
         <div className="flex-1 relative">
-          <div className="flex flex-col py-1 px-4 items-start h-full">
+          <div className="flex flex-col py-1 px-4 items-start">
             <h3 className="text-xl 2xl:text-2xl font-bold text-gray-900 dark:text-white mb-2">
               {book.title}
             </h3>

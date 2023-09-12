@@ -75,7 +75,7 @@ const Books = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-y-10 gap-x-6 lg:grid-cols-2 2xl:grid-cols-3  xl:gap-x-8">
+        <div className="grid grid-cols-1 gap-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
           {loading ? (
             <p className="text-gray-800 dark:text-white">Loading...</p>
           ) : (
