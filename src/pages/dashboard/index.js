@@ -43,13 +43,20 @@ const Dashboard = () => {
     <Layout>
       {/* Main Content */}
       <div className="p-2 sm:p-4 md:p-6 lg:p-8 xl:p-12 mt-14 md:mt-8 lg:mt-6 w-full">
-        <h1 className="text-3xl mb-4 dark:text-white">
-          {`${greeting()}${
-            userProfile[0]?.firstName ? `, ${userProfile[0].firstName}` : ""
-          }!`}
-        </h1>
+        <div className="flex flex-col md:flex-row justify-between items-center mb-6">
+          <div>
+            <h1 className="text-3xl mb-4 dark:text-white">
+              {`${greeting()}${
+                userProfile[0]?.first_name
+                  ? `, ${userProfile[0].first_name}`
+                  : ""
+              }`}
+            </h1>
+            <h2>Library overview</h2>
+          </div>
+        </div>
 
-        <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <SectionCard
             title="My Library"
             description={
@@ -102,7 +109,7 @@ const Dashboard = () => {
             title="Loaned Books"
             description={
               isEmptyLoanedBooks
-                ? "No loaned books. Start loaning out your books!"
+                ? "No loaned books."
                 : `You have ${loanedBooks.length} loaned books.`
             }
             href="/dashboard/loanedbooks"
@@ -155,25 +162,16 @@ const Dashboard = () => {
         </div>
 
         {/* Quick Actions Section */}
-        <div className="w-full mt-8 block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+        <div className="w-full flex flex-wrap space-x-8 mt-8 block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
           <h2 className="text-2xl mb-2">Quick Actions</h2>
           <div className="flex space-x-4">
-            <Link
-              href="/dashboard/books/add"
-              className="bg-blue-500 text-white px-4 py-2 rounded"
-            >
+            <Link href="/dashboard/books/add" className="button">
               Add Book
             </Link>
-            <Link
-              href="/dashboard/loanedbooks/add"
-              className="bg-green-500 text-white px-4 py-2 rounded"
-            >
+            <Link href="/dashboard/loanedbooks/add" className="button">
               Add Loan
             </Link>
-            <Link
-              href="/dashboard/shelf/add"
-              className="bg-red-500 text-white px-4 py-2 rounded"
-            >
+            <Link href="/dashboard/shelf/add" className="button">
               Add Shelf
             </Link>
           </div>

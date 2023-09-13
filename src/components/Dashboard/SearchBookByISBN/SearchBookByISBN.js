@@ -182,10 +182,7 @@ export default function SearchBookByISBN() {
               <span className="font-semibold">Description:</span>{" "}
               {book.description}
             </p>
-            <button
-              className="inline-flex items-center px-6 py-3 text-base font-medium text-center text-white bg-blue-600 hover:bg-blue-700 dark:hover:bg-blue-800 rounded-lg focus:ring focus:ring-blue-300 focus:ring-opacity-50 me-auto"
-              onClick={addToLibrary}
-            >
+            <button className="button me-auto" onClick={addToLibrary}>
               Edit and Confirm Details
             </button>
           </div>

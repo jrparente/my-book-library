@@ -17,9 +17,7 @@ const Settings = () => {
         </h1>
 
         <div className="flex items-center gap-4">
-          <p className="block font-medium text-gray-900 dark:text-white">
-            Theme preference:
-          </p>
+          <p>Theme preference:</p>
           <div className="flex items-center">
             <span className="text-sm text-gray-900 dark:text-white mr-2">
               {isDarkMode ? "Dark" : "Light"}

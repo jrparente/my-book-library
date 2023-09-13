@@ -1,12 +1,39 @@
 @tailwind base {
-  p {
-    @apply: block text-gray-900 dark:text-white;
-  }
 }
 @tailwind components;
 @tailwind utilities;
 
 body {
+  @apply block text-gray-900 dark:text-white;
+}
+
+h1 {
+  @apply text-5xl font-extrabold dark:text-white;
+}
+
+h2 {
+  @apply font-semibold text-gray-500 dark:text-gray-400;
+}
+
+img {
+  @apply h-auto max-w-full;
+}
+
+.link {
+  @apply font-medium text-primary-600 dark:text-primary-500;
+}
+
+.button {
+  @apply inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-primary-700 hover:bg-primary-600 rounded-lg no-underline;
+}
+
+.button-cancel {
+  @apply inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-red-800 hover:bg-red-700 rounded-lg;
+}
+
+input,
+textarea {
+  @apply block w-full p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white;
 }
 
 /* Theme Switcer Toggle */

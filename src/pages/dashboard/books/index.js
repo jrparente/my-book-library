@@ -33,7 +33,7 @@ const Books = () => {
     <Layout>
       {/* Main Content */}
       <div className="p-2 sm:p-4 md:p-6 lg:p-8 xl:p-12 mt-14 md:mt-8 lg:mt-6 w-full">
-        <div className="flex flex-col md:flex-row justify-between items-center mb-4">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-6">
           <h1 className="text-3xl mb-4 text-gray-800 dark:text-white">
             Your Books
           </h1>
@@ -60,10 +60,7 @@ const Books = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <Link
-              href="/dashboard/books/AddNewBook"
-              className="bg-blue-500 text-white px-4 py-2 rounded"
-            >
+            <Link href="/dashboard/books/AddNewBook" className="button">
               Add New Book
             </Link>
           </div>

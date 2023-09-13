@@ -128,15 +128,12 @@ const ProfileSettings = () => {
             <button
               type="button"
               onClick={toggleEditing}
-              className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-red-800 hover:bg-red-700 rounded-lg"
+              className="button-cancel"
             >
               Cancel
             </button>
 
-            <button
-              type="submit"
-              className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-primary-700 hover:bg-primary-600 rounded-lg ml-2"
-            >
+            <button type="submit" className="button ml-2">
               Update Profile
             </button>
           </form>
@@ -153,10 +150,7 @@ const ProfileSettings = () => {
               </div>
             </div>
 
-            <button
-              onClick={toggleEditing}
-              className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-primary-700 hover:bg-primary-600 rounded-lg"
-            >
+            <button onClick={toggleEditing} className="button">
               Edit Profile
             </button>
           </div>

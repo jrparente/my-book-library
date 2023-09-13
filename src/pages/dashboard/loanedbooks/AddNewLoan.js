@@ -66,7 +66,6 @@ export default function AddNewLoan() {
       alert("Failed to add new loan.");
     }
   };
-  console.log("bookId", bookID);
   return (
     <Layout>
       <div className="p-2 sm:p-4 md:p-6 lg:p-8 xl:p-12 mt-14 md:mt-8 lg:mt-6 w-full">
@@ -89,7 +88,6 @@ export default function AddNewLoan() {
               <div className="relative flex flex-col mt-2">
                 {searchTerm &&
                   filteredBooks.map((book) => {
-                    console.log(book);
                     return (
                       <div
                         key={book.id}
@@ -147,7 +145,7 @@ export default function AddNewLoan() {
 
             <div className="w-full">
               <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                Return Date:
+                Expected Return Date:
               </label>
               <input
                 type="date"
@@ -158,10 +156,7 @@ export default function AddNewLoan() {
             </div>
 
             <div className="w-full">
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                onClick={handleAddLoan}
-              >
+              <button className="button" onClick={handleAddLoan}>
                 Add Loan
               </button>
             </div>

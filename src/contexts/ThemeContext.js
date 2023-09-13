@@ -19,7 +19,7 @@ export const ThemeProvider = ({ children }) => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       window.localStorage.setItem("dark-mode", isDarkMode);
-      document.body.classList.toggle("dark", isDarkMode);
+      document.documentElement.classList.toggle("dark", isDarkMode);
     }
   }, [isDarkMode]);
 

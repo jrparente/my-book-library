@@ -50,8 +50,8 @@ const Layout = ({ children }) => {
           >
             <div className="px-4 py-3" role="none">
               <p className="text-sm text-gray-900 dark:text-white" role="none">
-                {user.user_metadata.firstName || "User"}{" "}
-                {user.user_metadata.lastName || "Name"}
+                {userProfile[0]?.first_name || "User"}{" "}
+                {userProfile[0]?.last_name || "Name"}
               </p>
               <p
                 className="text-sm font-medium text-gray-900 truncate dark:text-gray-300"

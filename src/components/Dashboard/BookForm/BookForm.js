@@ -432,10 +432,7 @@ const BookForm = ({
 
           {/* Submit Button */}
           <div className="sm:col-span-2">
-            <button
-              type="submit"
-              className="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-blue-700 rounded-lg"
-            >
+            <button type="submit" className="button">
               Add to Library
             </button>
           </div>
