@@ -18,6 +18,7 @@ export default function AddNewLoan() {
   const [returnDate, setReturnDate] = useState("");
   const [loanStatus, setLoanStatus] = useState("Loaned");
   const [searchTerm, setSearchTerm] = useState("");
+  const [notification, setNotification] = useState("");
 
   const filterWishlist = books.filter((book) => book.status !== "Wishlist");
 
@@ -27,6 +28,7 @@ export default function AddNewLoan() {
 
   // Function to handle both bookID and searchTerm states
   const handleBookSelection = (book) => {
+    setNotification("");
     setBookID(book.id);
     setSearchTerm(book.title);
   };
@@ -40,30 +42,36 @@ export default function AddNewLoan() {
     }
   }, [filterWishlist, bookID]);
 
-  const handleAddLoan = async () => {
-    if (!bookID || !borrower || !email || !loanDate || !returnDate) {
-      alert("Please fill in all fields.");
-      return;
-    }
+  const handleAddLoan = async (e) => {
+    e.preventDefault();
+    try {
+      if (!bookID || !borrower || !email || !loanDate || !returnDate) {
+        setNotification("Please fill in all fields.");
+        return;
+      }
 
-    const newLoan = {
-      bookTitle,
-      bookId: bookID,
-      borrowerName: borrower,
-      borrowerEmail: email,
-      date: loanDate,
-      dueDate: returnDate,
-      userid: user.id,
-      loanStatus,
-    };
+      const newLoan = {
+        bookTitle,
+        bookId: bookID,
+        borrowerName: borrower,
+        borrowerEmail: email,
+        date: loanDate,
+        dueDate: returnDate,
+        userid: user.id,
+        loanStatus,
+      };
 
-    const addedLoan = await addLoan(newLoan);
+      const addedLoan = await addLoan(newLoan);
 
-    if (addedLoan) {
-      alert("Loan added successfully.");
-      router.push("/dashboard/loanedbooks");
-    } else {
-      alert("Failed to add new loan.");
+      if (addedLoan) {
+        setNotification("");
+        router.push("/dashboard/loanedbooks");
+      } else {
+        setNotification("Failed to add new loan.");
+      }
+    } catch (error) {
+      console.error("An error occurred while adding the loan:", error);
+      setNotification("An unexpected error occurred.");
     }
   };
   return (
@@ -159,6 +167,19 @@ export default function AddNewLoan() {
               <button className="button" onClick={handleAddLoan}>
                 Add Loan
               </button>
+            </div>
+            <div className="w-full">
+              {notification && (
+                <div
+                  className={`p-4 rounded-lg text-center ${
+                    notification === "Loan added successfully."
+                      ? "bg-green-500 text-white"
+                      : "bg-red-500 text-white"
+                  }`}
+                >
+                  {notification}
+                </div>
+              )}
             </div>
           </div>
         </form>

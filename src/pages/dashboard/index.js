@@ -163,7 +163,9 @@ const Dashboard = () => {
 
         {/* Quick Actions Section */}
         <div className="w-full flex flex-wrap space-x-8 mt-8 block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-          <h2 className="text-2xl mb-2">Quick Actions</h2>
+          <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+            Quick Actions
+          </h5>
           <div className="flex space-x-4">
             <Link href="/dashboard/books/add" className="button">
               Add Book
