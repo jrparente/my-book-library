@@ -4,11 +4,13 @@ import { useUser } from "@/contexts/UserContext";
 import React, { useEffect } from "react";
 import Layout from "./layout";
 import SectionCard from "@/components/Dashboard/SectionCard";
-import { FaBook, FaHandHolding, FaRegHeart } from "react-icons/fa";
+import Link from "next/link";
+import { useShelves } from "@/contexts/ShelfContext";
 
 const Dashboard = () => {
   const { user, userProfile } = useUser();
   const { books } = useBooks();
+  const { shelves } = useShelves();
   const { loanedBooks, fetchLoanedBooks } = useLoans();
   const greeting = () => {
     const hour = new Date().getHours();
@@ -20,6 +22,8 @@ const Dashboard = () => {
   const filteredBooks = books.filter(
     (book) => book.status !== "Wishlist"
   ).length;
+
+  const numberOfShelves = shelves.length;
 
   const wishlistBooks = books.filter(
     (book) => book.status === "Wishlist"
@@ -45,7 +49,7 @@ const Dashboard = () => {
           }!`}
         </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           <SectionCard
             title="My Library"
             description={
@@ -66,6 +70,33 @@ const Dashboard = () => {
               </svg>
             }
             color="blue"
+          />
+          <SectionCard
+            title="Shelves"
+            description={
+              numberOfShelves === 0
+                ? "No shelves yet. Start organizing your books!"
+                : `You have ${numberOfShelves} shelves.`
+            }
+            href="/dashboard/shelves"
+            icon={
+              <svg
+                className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6.143 1H1.857A.857.857 0 0 0 1 1.857v4.286c0 .473.384.857.857.857h4.286A.857.857 0 0 0 7 6.143V1.857A.857.857 0 0 0 6.143 1Zm10 0h-4.286a.857.857 0 0 0-.857.857v4.286c0 .473.384.857.857.857h4.286A.857.857 0 0 0 17 6.143V1.857A.857.857 0 0 0 16.143 1Zm-10 10H1.857a.857.857 0 0 0-.857.857v4.286c0 .473.384.857.857.857h4.286A.857.857 0 0 0 7 16.143v-4.286A.857.857 0 0 0 6.143 11Zm10 0h-4.286a.857.857 0 0 0-.857.857v4.286c0 .473.384.857.857.857h4.286a.857.857 0 0 0 .857-.857v-4.286a.857.857 0 0 0-.857-.857Z"
+                />
+              </svg>
+            }
+            color="green"
           />
           <SectionCard
             title="Loaned Books"
@@ -121,6 +152,31 @@ const Dashboard = () => {
             }
             color="red"
           />
+        </div>
+
+        {/* Quick Actions Section */}
+        <div className="w-full mt-8 block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+          <h2 className="text-2xl mb-2">Quick Actions</h2>
+          <div className="flex space-x-4">
+            <Link
+              href="/dashboard/books/add"
+              className="bg-blue-500 text-white px-4 py-2 rounded"
+            >
+              Add Book
+            </Link>
+            <Link
+              href="/dashboard/loanedbooks/add"
+              className="bg-green-500 text-white px-4 py-2 rounded"
+            >
+              Add Loan
+            </Link>
+            <Link
+              href="/dashboard/shelf/add"
+              className="bg-red-500 text-white px-4 py-2 rounded"
+            >
+              Add Shelf
+            </Link>
+          </div>
         </div>
       </div>
     </Layout>

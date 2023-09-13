@@ -1,14 +1,12 @@
-@tailwind base;
+@tailwind base {
+  p {
+    @apply: block text-gray-900 dark:text-white;
+  }
+}
 @tailwind components;
 @tailwind utilities;
 
 body {
-}
-
-.dark p,
-.dark div,
-.dark sapn {
-  color: white;
 }
 
 /* Theme Switcer Toggle */
