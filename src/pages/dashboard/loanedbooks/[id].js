@@ -17,9 +17,10 @@ export default function LoanDetails() {
   const handleDeleteLoan = async () => {
     const success = await deleteLoan(id);
     if (success) {
-      alert("Loan deleted successfully");
+      setShowModal(false);
       router.push("/dashboard/loanedbooks"); // Navigate to wherever your loans list is
     } else {
+      setShowModal(false);
       alert("Failed to delete loan");
     }
   };
