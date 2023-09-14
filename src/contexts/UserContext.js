@@ -10,7 +10,7 @@ const AuthEvents = {
 const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(supabase.auth.getUser());
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -33,10 +33,6 @@ export const UserProvider = ({ children }) => {
         }
         fetchUserProfile();
       }
-
-      if (event === AuthEvents.SIGNED_OUT) {
-        router.push("/");
-      }
     };
 
     const {
@@ -53,7 +49,7 @@ export const UserProvider = ({ children }) => {
 
     if (user) {
       const { data, error } = await supabase
-        .from("users") // Replace with your actual table name
+        .from("users")
         .select("*")
         .eq("id", user.data.user.id)
         .select();

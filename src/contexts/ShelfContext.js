@@ -11,11 +11,8 @@ export const ShelfProvider = ({ children }) => {
   const [shelves, setShelves] = useState([]);
 
   // Fetch shelves
-  const fetchShelves = async (userId) => {
-    const { data, error } = await supabase
-      .from("shelves")
-      .select("*")
-      .eq("user_id", userId);
+  const fetchShelves = async () => {
+    const { data, error } = await supabase.from("shelves").select("*");
 
     if (error) {
       console.error("Error fetching shelves: ", error);

@@ -7,32 +7,24 @@ export const useLoans = () => {
   return useContext(LoansContext);
 };
 
-export const LoansProvider = ({ children, userId }) => {
+export const LoansProvider = ({ children }) => {
   const [loanedBooks, setLoanedBooks] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchLoanedBooks = async (userId) => {
-    if (!userId) {
-      return;
-    }
-    const { data, error } = await supabase
-      .from("loanedbooks")
-      .select("*")
-      .eq("userid", userId);
+  useEffect(() => {
+    fetchLoanedBooks();
+  }, []);
+
+  const fetchLoanedBooks = async () => {
+    const { data, error } = await supabase.from("loanedbooks").select("*");
 
     if (error) {
       console.error("Error fetching loaned books:", error);
     } else {
-      if (JSON.stringify(data) !== JSON.stringify(loanedBooks)) {
-        setLoanedBooks(Array.isArray(data) ? data : [data]);
-      }
+      setLoanedBooks(Array.isArray(data) ? data : [data]);
     }
     setLoading(false);
   };
-
-  useEffect(() => {
-    fetchLoanedBooks(userId);
-  }, [userId]);
 
   const addLoan = async (newLoan) => {
     try {

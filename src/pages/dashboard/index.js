@@ -10,8 +10,9 @@ import { useShelves } from "@/contexts/ShelfContext";
 const Dashboard = () => {
   const { user, userProfile } = useUser();
   const { books } = useBooks();
-  const { shelves } = useShelves();
+  const { shelves, fetchShelves } = useShelves();
   const { loanedBooks, fetchLoanedBooks } = useLoans();
+
   const greeting = () => {
     const hour = new Date().getHours();
     if (hour < 12) return "Good Morning";
@@ -29,15 +30,10 @@ const Dashboard = () => {
     (book) => book.status === "Wishlist"
   ).length;
 
-  useEffect(() => {
-    if (user && user.id) {
-      fetchLoanedBooks(user.id);
-    }
-  }, [user, fetchLoanedBooks]);
-
   const isEmptyLibrary = filteredBooks === 0;
   const isEmptyLoanedBooks = loanedBooks.length === 0;
   const isEmptyWishlist = wishlistBooks === 0;
+  const isEmptyShelves = numberOfShelves === 0;
 
   return (
     <Layout>
@@ -81,7 +77,7 @@ const Dashboard = () => {
           <SectionCard
             title="Shelves"
             description={
-              numberOfShelves === 0
+              isEmptyShelves
                 ? "No shelves yet. Start organizing your books!"
                 : `You have ${numberOfShelves} shelves.`
             }

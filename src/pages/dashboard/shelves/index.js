@@ -8,8 +8,7 @@ import DeleteModal from "@/components/Dashboard/DeleteModal/DeleteModal";
 
 export default function ShelfDashboard() {
   const { user } = useUser();
-  const { shelves, fetchShelves, addShelf, updateShelf, deleteShelf } =
-    useShelves();
+  const { shelves, fetchShelves, deleteShelf } = useShelves();
   const { books } = useBooks();
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredShelves, setFilteredShelves] = useState([]);
