@@ -22,6 +22,10 @@ export const ShelfProvider = ({ children }) => {
     setShelves(data);
   };
 
+  useEffect(() => {
+    fetchShelves();
+  }, []);
+
   const fetchInitialShelf = async (bookId) => {
     if (!bookId) return null;
 

@@ -47,7 +47,7 @@ const BookCard = ({ book }) => {
       href={`/dashboard/books/${book.id}`}
       className="group max-w-lg aspect-w-7 aspect-h-1 w-full overflow-hidden xl:aspect-w-6 xl:aspect-h-5"
     >
-      <div class="relative m-0 shadow-lg flex">
+      <div className="relative m-0 shadow-lg flex">
         <div className="flex-no-shrink mx-auto">
           <Image
             src={

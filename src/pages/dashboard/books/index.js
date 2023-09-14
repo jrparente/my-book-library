@@ -10,6 +10,9 @@ const Books = () => {
   const { books, loading, fetchResults } = useBooks();
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredBooks, setFilteredBooks] = useState([]);
+  const [sortOption, setSortOption] = useState("Author");
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [sortedBooks, setSortedBooks] = useState([]);
 
   useEffect(() => {
     if (!user || !user.id) return;
@@ -28,6 +31,18 @@ const Books = () => {
   }, [searchTerm, books, fetchResults, user]);
 
   const totalBooks = filteredBooks.length;
+
+  useEffect(() => {
+    let sortBooks = [...filteredBooks];
+    sortBooks.sort((a, b) => {
+      if (sortOrder === "asc") {
+        return a[sortOption] < b[sortOption] ? -1 : 1;
+      } else {
+        return a[sortOption] > b[sortOption] ? -1 : 1;
+      }
+    });
+    setSortedBooks(sortBooks);
+  }, [filteredBooks, sortOption, sortOrder]);
 
   return (
     <Layout>
@@ -70,13 +85,28 @@ const Books = () => {
           <div className="flex-1 p-4 bg-gray-100 dark:bg-gray-800 rounded">
             <strong>Total Books:</strong> {totalBooks}
           </div>
+          <select
+            className="text-gray-900 bg-gray-100 dark:bg-gray-800 border rounded-md p-2 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+            onChange={(e) => setSortOption(e.target.value)}
+          >
+            <option value="author_last_name">Author</option>
+            <option value="title">Title</option>
+            <option value="created_at">Date Added</option>
+          </select>
+          <select
+            className="text-gray-900 bg-gray-100 dark:bg-gray-800 border rounded-md p-2 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+            onChange={(e) => setSortOrder(e.target.value)}
+          >
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+          </select>
         </div>
 
         <div className="grid grid-cols-1 gap-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
           {loading ? (
             <p className="text-gray-800 dark:text-white">Loading...</p>
           ) : (
-            filteredBooks.map((book, index) => (
+            sortedBooks.map((book, index) => (
               <BookCard key={book.id} book={book} />
             ))
           )}

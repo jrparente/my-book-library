@@ -8,10 +8,10 @@ import Link from "next/link";
 import { useShelves } from "@/contexts/ShelfContext";
 
 const Dashboard = () => {
-  const { user, userProfile } = useUser();
+  const { userProfile } = useUser();
   const { books } = useBooks();
-  const { shelves, fetchShelves } = useShelves();
-  const { loanedBooks, fetchLoanedBooks } = useLoans();
+  const { shelves } = useShelves();
+  const { loanedBooks } = useLoans();
 
   const greeting = () => {
     const hour = new Date().getHours();
@@ -20,18 +20,18 @@ const Dashboard = () => {
     return "Good Evening";
   };
 
+  // Calculate stats from context data
   const filteredBooks = books.filter(
     (book) => book.status !== "Wishlist"
   ).length;
-
+  const countLoans = loanedBooks.filter((loan) => !loan.returned).length;
   const numberOfShelves = shelves.length;
-
   const wishlistBooks = books.filter(
     (book) => book.status === "Wishlist"
   ).length;
 
   const isEmptyLibrary = filteredBooks === 0;
-  const isEmptyLoanedBooks = loanedBooks.length === 0;
+  const isEmptyLoanedBooks = countLoans === 0;
   const isEmptyWishlist = wishlistBooks === 0;
   const isEmptyShelves = numberOfShelves === 0;
 
@@ -106,7 +106,7 @@ const Dashboard = () => {
             description={
               isEmptyLoanedBooks
                 ? "No loaned books."
-                : `You have ${loanedBooks.length} loaned books.`
+                : `You have ${countLoans} loaned books.`
             }
             href="/dashboard/loanedbooks"
             icon={
