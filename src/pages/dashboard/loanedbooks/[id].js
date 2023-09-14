@@ -2,12 +2,15 @@ import { useRouter } from "next/router";
 import { useLoans } from "@/contexts/LoansContext";
 import { useBooks } from "@/contexts/BooksContext";
 import Layout from "../layout";
+import DeleteModal from "@/components/Dashboard/DeleteModal";
+import { useState } from "react";
 
 export default function LoanDetails() {
   const router = useRouter();
   const { id } = router.query;
   const { loanedBooks, deleteLoan } = useLoans();
   const { books } = useBooks();
+  const [showModal, setShowModal] = useState(false);
 
   const specificLoan = loanedBooks.find((loan) => loan.loanid === id);
 
@@ -26,6 +29,10 @@ export default function LoanDetails() {
   }
 
   const bookDetails = books.find((book) => book.id === specificLoan?.bookId);
+
+  const handleClose = () => {
+    setShowModal(false);
+  };
 
   return (
     <Layout>
@@ -69,13 +76,18 @@ export default function LoanDetails() {
         </div>
         <div className="flex justify-between">
           <button
-            onClick={handleDeleteLoan}
+            onClick={() => setShowModal(true)}
             className="bg-red-500 text-white px-4 py-2 rounded"
           >
             Delete Loan
           </button>
         </div>
       </div>
+      <DeleteModal
+        showModal={showModal}
+        handleDelete={handleDeleteLoan}
+        handleClose={handleClose}
+      />
     </Layout>
   );
 }

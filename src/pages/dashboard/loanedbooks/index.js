@@ -95,10 +95,10 @@ const LoanedBooks = () => {
                 <Link
                   key={loan.loanid}
                   href={`/dashboard/loanedbooks/${loan.loanid}`}
-                  className="p-4 bg-white border rounded shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+                  className="flex flex-col justify-between p-4 bg-white border rounded shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
                 >
                   <div className="flex items-start justify-between mb-2">
-                    <h2 className="text-xl">{matchingBook?.title}</h2>
+                    <h2 className="text-base">{matchingBook?.title}</h2>
                     <div
                       className={`px-2 py-1 rounded-full text-xs text-white ${getStatusColor(
                         isOverdue
@@ -107,8 +107,12 @@ const LoanedBooks = () => {
                       {isOverdue ? "Overdue" : "In Time"}
                     </div>
                   </div>
-                  <p>Loaned to: {loan.borrowerName}</p>
-                  <p>Due date: {new Date(loan.dueDate).toLocaleDateString()}</p>
+                  <div>
+                    <p>Loaned to: {loan.borrowerName}</p>
+                    <p>
+                      Due date: {new Date(loan.dueDate).toLocaleDateString()}
+                    </p>
+                  </div>
                 </Link>
               );
             })}

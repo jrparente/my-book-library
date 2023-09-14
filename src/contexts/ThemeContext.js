@@ -7,14 +7,13 @@ export const useTheme = () => {
 };
 
 export const ThemeProvider = ({ children }) => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  useEffect(() => {
+  const [isDarkMode, setIsDarkMode] = useState(() => {
     if (typeof window !== "undefined") {
-      const initialMode = window.localStorage.getItem("dark-mode");
-      setIsDarkMode(initialMode === "true");
+      const storedValue = window.localStorage.getItem("dark-mode");
+      return storedValue === "true";
     }
-  }, []);
+    return false;
+  });
 
   useEffect(() => {
     if (typeof window !== "undefined") {
