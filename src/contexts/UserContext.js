@@ -28,6 +28,9 @@ export const UserProvider = ({ children }) => {
       setLoading(false);
 
       if (event === AuthEvents.SIGNED_IN) {
+        if (!router.pathname.startsWith("/dashboard")) {
+          router.push("/dashboard");
+        }
         fetchUserProfile();
       }
     };
@@ -42,26 +45,25 @@ export const UserProvider = ({ children }) => {
   }, [router]);
 
   const fetchUserProfile = async () => {
-    try {
-      setLoading(true);
-      if (!session?.user) throw new Error("No user on the session!");
+    const user = await supabase.auth.getUser();
 
-      const { data, error, status } = await supabase.from("users").select("*");
-
-      if (error && status !== 406) {
-        throw error;
-      }
+    if (user) {
+      const { data, error } = await supabase
+        .from("users")
+        .select("*")
+        .eq("id", user.data.user.id)
+        .select();
 
       if (data) {
-        console.log("User data fetched successfully", data);
         setUserProfile(data);
+        return userProfile;
       }
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error("Error fetching user:", error.message);
+      if (error) {
+        setError("Error fetching user profile: " + error.message);
+        console.error("Error fetching user profile:", error);
       }
-    } finally {
-      setLoading(false);
+    } else {
+      setError("No user found.");
     }
   };
 

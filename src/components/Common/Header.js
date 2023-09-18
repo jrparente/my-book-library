@@ -1,5 +1,6 @@
 import { useUser } from "@/contexts/UserContext";
 import useToggle from "@/lib/useToggle";
+import Image from "next/image";
 import Link from "next/link";
 
 const Header = () => {
@@ -10,23 +11,14 @@ const Header = () => {
     <header>
       <nav className="bg-white border-gray-200 dark:bg-gray-900">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-          <Link className="flex items-center" href="/">
-            <svg
-              className="w-5 h-5 text-gray-800 dark:text-white"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 20 18"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M10 16.5c0-1-8-2.7-9-2V1.8c1-1 9 .707 9 1.706M10 16.5V3.506M10 16.5c0-1 8-2.7 9-2V1.8c-1-1-9 .707-9 1.706"
-              />
-            </svg>
-            <span className="self-center text-xl tracking-tight font-extrabold whitespace-nowrap dark:text-white ml-1">
+          <Link href="/" className="flex items-center ml-2 md:mr-24">
+            <Image
+              src="/images/mbl-logo.png"
+              width={35}
+              height={35}
+              alt="My Book Library logo"
+            />
+            <span className="self-center text-xl tracking-tight font-extrabold whitespace-nowrap dark:text-white ml-3">
               My Book Library
             </span>
           </Link>

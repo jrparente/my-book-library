@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
@@ -31,22 +32,13 @@ const Header = ({ toggleMenu, userProfile, toggleAside }) => {
               </svg>
             </button>
             <Link href="/dashboard" className="flex items-center ml-2 md:mr-24">
-              <svg
-                className="w-5 h-5 text-gray-800 dark:text-white"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 20 18"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M10 16.5c0-1-8-2.7-9-2V1.8c1-1 9 .707 9 1.706M10 16.5V3.506M10 16.5c0-1 8-2.7 9-2V1.8c-1-1-9 .707-9 1.706"
-                />
-              </svg>
-              <span className="self-center text-xl tracking-tight font-extrabold whitespace-nowrap dark:text-white ml-1">
+              <Image
+                src="/images/mbl-logo.png"
+                width={35}
+                height={35}
+                alt="My Book Library logo"
+              />
+              <span className="self-center text-xl tracking-tight font-extrabold whitespace-nowrap dark:text-white ml-3">
                 My Book Library
               </span>
             </Link>
