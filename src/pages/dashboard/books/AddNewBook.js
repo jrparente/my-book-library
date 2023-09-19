@@ -3,8 +3,6 @@ import Layout from "../layout";
 import { useBooks } from "@/contexts/BooksContext";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import SearchBookByISBN from "@/components/Dashboard/SearchBookByISBN/SearchBookByISBN";
-import SearchBookByQuery from "@/components/Dashboard/SearchBookByQuery/SearchBookByQuery";
 import SearchGoogleBooks from "@/components/Dashboard/SearchGoogleBooks/SearchGoogleBooks";
 
 import { useShelves } from "@/contexts/ShelfContext";
@@ -74,19 +72,6 @@ const AddNewBook = () => {
           </li>
           <li className="mr-2">
             <button
-              onClick={() => setActiveTab("isbn")}
-              className={`inline-block p-4 rounded-t-lg 
-                 ${
-                   activeTab === "isbn"
-                     ? "text-blue-600 bg-gray-100 dark:bg-gray-800 dark:text-blue-500"
-                     : ""
-                 }`}
-            >
-              Search by ISBN
-            </button>
-          </li>
-          <li className="mr-2">
-            <button
               onClick={() => setActiveTab("google")}
               className={`inline-block p-4 rounded-t-lg 
                ${
@@ -113,7 +98,6 @@ const AddNewBook = () => {
         {activeTab === "manual" && (
           <BookForm initialValues={initialValues} onSubmit={handleSubmit} />
         )}
-        {activeTab === "isbn" && <SearchBookByISBN />}
         {activeTab === "google" && <SearchGoogleBooks />}
       </div>
     </Layout>

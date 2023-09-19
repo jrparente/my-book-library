@@ -33,9 +33,6 @@ export default function SearchGoogleBooks() {
   };
   return (
     <div className="mt-4 max-w-4xl">
-      <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
-        Search Google Books
-      </h2>
       <form className="flex flex-wrap gap-2 sm:space-x-2 sm:flex-nowrap mb-6">
         <input
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"

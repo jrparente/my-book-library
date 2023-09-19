@@ -56,6 +56,14 @@ function GoogleBookSearchCard({ book }) {
 
   return (
     <div className="flex flex-col flex-wrap gap-1 p-2 sm:p-4 md:p-6 bg-white border rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+      {imageLinks?.thumbnail && (
+        <div>
+          <img
+            src={imageLinks?.thumbnail || ""}
+            alt={title || "No image available"}
+          />
+        </div>
+      )}
       <h3 className="text-lg font-bold dark:text-white">{title}</h3>
       <p className="text-gray-700 dark:text-gray-400">
         <span className="font-semibold">Authors:</span>{" "}
@@ -93,12 +101,6 @@ function GoogleBookSearchCard({ book }) {
         <span className="font-semibold">Description:</span>{" "}
         {description || "N/A"}
       </p>
-      <div>
-        <img
-          src={imageLinks?.thumbnail || ""}
-          alt={title || "No image available"}
-        />
-      </div>
 
       <button className="button me-auto mt-2" onClick={addToLibrary}>
         Edit and Confirm Details
