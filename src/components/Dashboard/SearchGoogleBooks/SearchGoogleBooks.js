@@ -31,7 +31,6 @@ export default function SearchGoogleBooks() {
       alert("An error occurred while fetching the books.");
     }
   };
-  console.log(books);
   return (
     <div className="mt-4 max-w-4xl">
       <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">

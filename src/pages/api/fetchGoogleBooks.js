@@ -1,9 +1,4 @@
-// pages/api/fetchGoogleBooks.js
 export default async function handler(req, res) {
-  // if (req.query.API_ROUTE_SECRET !== process.env.API_ROUTE_SECRET) {
-  //   return res.status(401).send("You are not authorized to call this API.");
-  // }
-
   if (req.method !== "GET") {
     return res.status(405).end(); // Method Not Allowed
   }
@@ -17,7 +12,16 @@ export default async function handler(req, res) {
   try {
     const baseUrl = "https://www.googleapis.com/books/v1/volumes";
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_BOOKS_API_KEY;
-    const url = `${baseUrl}?q=${query}&key=${apiKey}`;
+    let url;
+
+    if (/^\d+$/.test(query)) {
+      // If the query is numeric, search by ISBN
+      url = `${baseUrl}?q=isbn:${query}&key=${apiKey}`;
+    } else {
+      // Otherwise, use the original query
+      url = `${baseUrl}?q=${query}&key=${apiKey}`;
+    }
+
     const response = await fetch(url);
 
     if (!response.ok) {
