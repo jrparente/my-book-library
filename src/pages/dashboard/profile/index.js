@@ -43,15 +43,19 @@ const ProfileSettings = () => {
     e.preventDefault();
     if (isValid) {
       const success = await updateUserProfile(formData);
+      console.log(success);
       if (success) {
-        alert("Profile updated successfully");
-        toggleEditing();
+        setNotification("Profile updated successfully");
       } else {
-        alert("Failed to update profile");
+        setNotification("Failed to update profile");
       }
     } else {
-      alert("Please fill in all fields.");
+      setNotification("Please fill in all fields.");
     }
+    setTimeout(() => {
+      setNotification("");
+      toggleEditing();
+    }, 3000);
   };
 
   if (!userProfile || loading) {
@@ -75,6 +79,9 @@ const ProfileSettings = () => {
         <h1 className="text-3xl mb-4 text-gray-800 dark:text-white">Profile</h1>
         {isEditing ? (
           <form onSubmit={handleSubmit} className="space-y-4">
+            {notification && (
+              <p className="text-green-500 mb-2">{notification}</p>
+            )}
             <div className="form-group">
               <label
                 htmlFor="firstName"
@@ -137,6 +144,9 @@ const ProfileSettings = () => {
           </form>
         ) : (
           <div className="flex flex-col space-y-6 items-start">
+            {notification && (
+              <p className="text-green-500 mb-2">{notification}</p>
+            )}
             {/* Profile information */}
             <div className="flex space-x-4 mb-4 w-full">
               <div className="flex-1 p-4 bg-gray-100 dark:bg-gray-800 rounded">

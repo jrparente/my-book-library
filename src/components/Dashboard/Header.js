@@ -55,14 +55,23 @@ const Header = ({ toggleMenu, userProfile, toggleAside }) => {
                   onClick={toggleMenu}
                 >
                   <span className="sr-only">Open user menu</span>
-                  <img
-                    className="w-8 h-8 rounded-full"
-                    src={
-                      userProfile[0]?.image_url ||
-                      "/images/profile-placeholder.png"
-                    }
-                    alt="User photo"
-                  />
+                  {userProfile && userProfile[0] && userProfile[0].image_url ? (
+                    <Image
+                      width={40}
+                      height={40}
+                      className="w-8 h-8 rounded-full"
+                      src={userProfile[0]?.image_url}
+                      alt="User photo"
+                    />
+                  ) : (
+                    <Image
+                      width={40}
+                      height={40}
+                      className="w-8 h-8 rounded-full"
+                      src="/images/profile-placeholder.png"
+                      alt="User photo"
+                    />
+                  )}
                 </button>
               </div>
             </div>

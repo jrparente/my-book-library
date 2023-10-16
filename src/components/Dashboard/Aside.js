@@ -88,7 +88,7 @@ export default function Aside({ asideOpen }) {
                   d="m1 14 3-3m-3 3 3 3m-3-3h16v-3m2-7-3 3m3-3-3-3m3 3H3v3"
                 />
               </svg>
-              <span className="ml-3">Loanded Books</span>
+              <span className="ml-3">Loaned Books</span>
             </Link>
           </li>
           <li>
