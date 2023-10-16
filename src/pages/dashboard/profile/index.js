@@ -2,22 +2,18 @@ import React, { useState, useEffect } from "react";
 import { useUser } from "@/contexts/UserContext";
 import Layout from "../layout";
 import useToggle from "@/lib/useToggle";
+import Loading from "@/components/Dashboard/Loading";
 
 const ProfileSettings = () => {
-  const { userProfile, updateUserProfile } = useUser();
+  const { userProfile, updateUserProfile, loading } = useUser();
   const [notification, setNotification] = useState("");
   const [isEditing, toggleEditing] = useToggle(false);
-  const initialFormData = userProfile
-    ? {
-        firstName: userProfile[0]?.first_name || "",
-        lastName: userProfile[0]?.last_name || "",
-        email: userProfile[0]?.email || "",
-      }
-    : {
-        firstName: "",
-        lastName: "",
-        email: "",
-      };
+
+  const initialFormData = {
+    firstName: userProfile?.[0]?.first_name || "",
+    lastName: userProfile?.[0]?.last_name || "",
+    email: userProfile?.[0]?.email || "",
+  };
 
   const [formData, setFormData] = useState(initialFormData);
 
@@ -58,19 +54,21 @@ const ProfileSettings = () => {
     }
   };
 
-  if (!userProfile) {
+  if (!userProfile || loading) {
     return (
       <Layout>
         <div className="p-2 sm:p-4 md:p-6 lg:p-8 xl:p-12 mt-14 md:mt-8 lg:mt-6 w-full">
           <h1 className="text-3xl mb-4 text-gray-800 dark:text-white">
             Profile Settings
           </h1>
-          <p>Loading...</p>
+          <Loading />
         </div>
       </Layout>
     );
   }
-
+  console.log("userProfile", userProfile);
+  console.log("formData", formData);
+  console.log("loading", loading);
   return (
     <Layout>
       <div className="p-2 sm:p-4 md:p-6 lg:p-8 xl:p-12 mt-14 md:mt-8 lg:mt-6 w-full">

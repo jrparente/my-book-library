@@ -25,13 +25,13 @@ export const UserProvider = ({ children }) => {
     const handleAuthStateChange = async (event, session) => {
       setSession(session);
       setUser(session?.user ?? null);
-      setLoading(false);
 
       if (event === AuthEvents.SIGNED_IN) {
         if (!router.pathname.startsWith("/dashboard")) {
           router.push("/dashboard");
         }
         fetchUserProfile();
+        setLoading(false);
       }
     };
 
@@ -45,7 +45,9 @@ export const UserProvider = ({ children }) => {
   }, [router]);
 
   const fetchUserProfile = async () => {
+    setLoading(true);
     const user = await supabase.auth.getUser();
+    const result = { data: null, error: null };
 
     if (user) {
       const { data, error } = await supabase
@@ -56,15 +58,19 @@ export const UserProvider = ({ children }) => {
 
       if (data) {
         setUserProfile(data);
-        return userProfile;
+        result.data = data;
       }
       if (error) {
         setError("Error fetching user profile: " + error.message);
         console.error("Error fetching user profile:", error);
+        result.error = error;
       }
     } else {
       setError("No user found.");
+      result.error = new Error("No user found.");
     }
+    setLoading(false);
+    return result;
   };
 
   const logout = async () => {
@@ -78,7 +84,8 @@ export const UserProvider = ({ children }) => {
 
   const updateUserProfile = async (newData) => {
     if (!user) return false;
-
+    setLoading(true);
+    console.log("newData", newData);
     try {
       const { data, error } = await supabase
         .from("users") // Replace with your actual table name
@@ -98,9 +105,11 @@ export const UserProvider = ({ children }) => {
       // Update local state if needed
       setUserProfile(data);
 
+      setLoading(false);
       return true;
     } catch (err) {
       console.error("An error occurred:", err);
+      setLoading(false);
       return false;
     }
   };
