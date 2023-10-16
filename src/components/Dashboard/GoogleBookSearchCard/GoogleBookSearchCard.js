@@ -1,5 +1,6 @@
 import { useUser } from "@/contexts/UserContext";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 function GoogleBookSearchCard({ book }) {
   const { user } = useUser();
@@ -18,6 +19,19 @@ function GoogleBookSearchCard({ book }) {
     imageLinks,
   } = book;
 
+  console.log(book);
+
+  const [authorFirstName, setAuthorFirstName] = useState("");
+  const [authorLastName, setAuthorLastName] = useState("");
+
+  useEffect(() => {
+    if (authors && authors.length > 0) {
+      const authorNameParts = authors[0].split(" ");
+      setAuthorFirstName(authorNameParts[0]);
+      setAuthorLastName(authorNameParts.slice(1).join(" "));
+    }
+  }, [authors]);
+
   const isbn13 =
     industryIdentifiers?.find((id) => id.type === "ISBN_13")?.identifier ||
     "N/A";
@@ -33,6 +47,8 @@ function GoogleBookSearchCard({ book }) {
 
     const bookDetails = {
       title,
+      author_first_name: authorFirstName,
+      author_last_name: authorLastName,
       publisher,
       published_date: publishedDate,
       isbn: isbn13,

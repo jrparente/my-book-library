@@ -158,18 +158,18 @@ const Dashboard = () => {
         </div>
 
         {/* Quick Actions Section */}
-        <div className="w-full flex flex-wrap space-x-8 mt-8 block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+        <div className="w-full flex flex-wrap gap-8 mt-8 p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
           <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
             Quick Actions
           </h5>
-          <div className="flex space-x-4">
-            <Link href="/dashboard/books/add" className="button">
+          <div className="flex flex-wrap gap-4">
+            <Link href="/dashboard/books/AddNewBook" className="button">
               Add Book
             </Link>
-            <Link href="/dashboard/loanedbooks/add" className="button">
+            <Link href="/dashboard/loanedbooks/AddNewLoan" className="button">
               Add Loan
             </Link>
-            <Link href="/dashboard/shelf/add" className="button">
+            <Link href="/dashboard/shelves/AddNewShelf" className="button">
               Add Shelf
             </Link>
           </div>

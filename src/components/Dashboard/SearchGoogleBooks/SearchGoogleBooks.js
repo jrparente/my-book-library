@@ -31,6 +31,7 @@ export default function SearchGoogleBooks() {
       alert("An error occurred while fetching the books.");
     }
   };
+
   return (
     <div className="mt-4 max-w-4xl">
       <form className="flex flex-wrap gap-2 sm:space-x-2 sm:flex-nowrap mb-6">

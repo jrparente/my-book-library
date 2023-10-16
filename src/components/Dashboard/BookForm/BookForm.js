@@ -165,7 +165,6 @@ const BookForm = ({
       ...(!created_at && { created_at: formattedCreatedDate }),
       ...(selectedShelf && { shelf_id: selectedShelf }),
     };
-    console.log("bookDetails", bookDetails);
     onSubmit(bookDetails);
   };
 
