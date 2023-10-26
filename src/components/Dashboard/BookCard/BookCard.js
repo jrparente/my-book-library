@@ -47,26 +47,47 @@ const BookCard = ({ book }) => {
       href={`/dashboard/books/${book.id}`}
       className="group max-w-lg aspect-w-7 aspect-h-1 w-full overflow-hidden xl:aspect-w-6 xl:aspect-h-5"
     >
-      <div className="relative m-0 shadow-lg flex">
-        <div className="flex-no-shrink mx-auto">
-          <Image
-            src={
-              book?.imageUrl ? book.imageUrl : "/images/placeholder-image.png"
-            }
-            alt="Book cover"
-            loading="lazy"
-            width={200}
-            height={350}
-            className={cn(
-              "duration-700 ease-in-out group-hover:opacity-75",
-              isLoading
-                ? "scale-110 blur-2xl grayscale"
-                : "scale-100 blur-0 grayscale-0"
-            )}
-            onLoadingComplete={() => setLoading(false)}
-          />
+      <div className="relative m-0 shadow-sm flex">
+        <div className="flex-1 flex items-center justify-center w-full mx-auto">
+          {book?.imageUrl ? (
+            <Image
+              src={book.imageUrl}
+              alt="Book cover"
+              loading="lazy"
+              width={350}
+              height={450}
+              className={cn(
+                "duration-700 ease-in-out group-hover:opacity-75",
+                isLoading
+                  ? "scale-110 blur-2xl grayscale"
+                  : "scale-100 blur-0 grayscale-0"
+              )}
+              onLoadingComplete={() => setLoading(false)}
+            />
+          ) : (
+            <div className="relative w-full h-[450px] xs:h-[320px] bg-gray-200 dark:bg-gray-600 border border-gray-300 dark:border-gray-700 shadow-md flex flex-col">
+              <div className="p-4 absolute top-6">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                  {book.title}
+                </h3>
+                {book.author_first_name && book.author_last_name && (
+                  <p className="text-lg font-medium text-gray-600 dark:text-white">
+                    {`${book.author_first_name} ${book.author_last_name}`}
+                  </p>
+                )}
+              </div>
+              <div className="absolute bottom-6 left-1 p-4">
+                <Image
+                  src="/images/mbl-logo.png"
+                  width={35}
+                  height={35}
+                  alt="My Book Library logo"
+                />
+              </div>
+            </div>
+          )}
         </div>
-        <div className="flex-1 relative">
+        <div className="hidden xs:flex flex-1 relative">
           <div className="flex flex-col py-1 px-4 items-start h-full">
             <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
               {book.title}

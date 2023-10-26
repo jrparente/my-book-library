@@ -4,6 +4,7 @@ import Layout from "../layout";
 import BookCard from "@/components/Dashboard/BookCard/BookCard";
 import Link from "next/link";
 import { useUser } from "@/contexts/UserContext";
+import { AiOutlineSearch } from "react-icons/ai";
 
 const Books = () => {
   const { user } = useUser();
@@ -55,17 +56,7 @@ const Books = () => {
           <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 items-center">
             <div className="relative rounded-md shadow-sm">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg
-                  className="h-5 w-5 text-gray-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                  />
-                </svg>
+                <AiOutlineSearch className="h-5 w-5 text-gray-400" />
               </div>
               <input
                 type="text"
@@ -81,25 +72,31 @@ const Books = () => {
           </div>
         </div>
 
-        <div className="flex space-x-4 mb-4">
-          <div className="flex-1 p-4 bg-gray-100 dark:bg-gray-800 rounded">
+        <div className="flex flex-col sm:flex-row w-full gap-4 mb-28 sm:mb-10 h-10">
+          <div className="flex-1 flex items-center gap-2 justify-start p-4 bg-gray-100 dark:bg-gray-800 rounded">
             <strong>Total Books:</strong> {totalBooks}
           </div>
-          <select
-            className="text-gray-900 bg-gray-100 dark:bg-gray-800 border rounded-md p-2 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-            onChange={(e) => setSortOption(e.target.value)}
-          >
-            <option value="author_last_name">Author</option>
-            <option value="title">Title</option>
-            <option value="created_at">Date Added</option>
-          </select>
-          <select
-            className="text-gray-900 bg-gray-100 dark:bg-gray-800 border rounded-md p-2 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-            onChange={(e) => setSortOrder(e.target.value)}
-          >
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
-          </select>
+          <div className="flex-1 flex w-full gap-2">
+            <select
+              className="flex-1 text-gray-900 bg-gray-100 dark:bg-gray-800 border rounded-md p-2 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+              onChange={(e) => setSortOption(e.target.value)}
+            >
+              <option value="author_last_name">Author</option>
+              <option value="title">Title</option>
+              <option value="created_at">Date Added</option>
+            </select>
+
+            <div
+              className="flex-shrink-0 w-10 h-10 flex items-center justify-center text-gray-900 bg-gray-100 dark:bg-gray-800 dark:text-white border rounded-md p-2 focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+              onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+            >
+              {sortOrder === "asc" ? (
+                <span>&#8593;</span> // Up arrow for ascending
+              ) : (
+                <span>&#8595;</span> // Down arrow for descending
+              )}
+            </div>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 gap-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">

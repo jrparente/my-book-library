@@ -4,6 +4,7 @@ import BookCard from "@/components/Dashboard/BookCard/BookCard";
 import Link from "next/link";
 import { useUser } from "@/contexts/UserContext";
 import { useBooks } from "@/contexts/BooksContext";
+import { AiOutlineSearch } from "react-icons/ai";
 
 const Wishlist = () => {
   const { user } = useUser();
@@ -40,17 +41,7 @@ const Wishlist = () => {
           <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 items-center">
             <div className="relative rounded-md shadow-sm">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg
-                  className="h-5 w-5 text-gray-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                  />
-                </svg>
+                <AiOutlineSearch className="h-5 w-5 text-gray-400" />
               </div>
               <input
                 type="text"
@@ -66,8 +57,8 @@ const Wishlist = () => {
           </div>
         </div>
 
-        <div className="flex space-x-4 mb-4">
-          <div className="flex-1 p-4 bg-gray-100 dark:bg-gray-800 rounded">
+        <div className="flex flex-col sm:flex-row w-full gap-4 mb-28 sm:mb-10 h-10">
+          <div className="flex-1 flex items-center gap-2 justify-start p-4 bg-gray-100 dark:bg-gray-800 rounded">
             <strong>Total Books in Wishlist:</strong> {totalBooks}
           </div>
         </div>
